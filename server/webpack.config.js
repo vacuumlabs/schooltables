@@ -38,6 +38,10 @@ module.exports = {
         }
       },
       {
+        test: /\.(png$|jpe?g$|gif$|bmp$)?$/,
+        loaders: 'url-loader'
+      },
+      {
         test: /\.(css|svg)?$/,
         loaders: 'null-loader'
       }
