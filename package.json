@@ -11,6 +11,29 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "fix": "prettier-eslint --write \"src/**/*.{js,jsx,json,css}\" \"server/src/**/*.{js,jsx,json,css}\"",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,json,css}": [
+      "prettier-eslint --write",
+      "git add"
+    ],
+    "server/src/**/*.{js,jsx,json,css}": [
+      "prettier-eslint --write",
+      "git add"
+    ]
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.2.3",
+    "eslint": "^4.19.1",
+    "eslint-config-vacuumlabs": "^1.5.0",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-react": "^7.9.1",
+    "husky": "^0.14.3",
+    "lint-staged": "^7.1.3",
+    "prettier": "^1.13.4",
+    "prettier-eslint-cli": "^4.7.1"
   }
 }
