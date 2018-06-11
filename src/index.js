@@ -1,3 +1,8 @@
+// polyfills
+import 'regenerator-runtime/runtime'
+import 'whatwg-fetch'
+import Promise from 'bluebird'
+
 import React from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
@@ -5,9 +10,10 @@ import {BrowserRouter} from 'react-router-dom'
 import {Provider} from 'react-redux'
 import configureStore from './configureStore'
 import './index.css'
-import App from './App'
+import App from './components/App'
 import registerServiceWorker from './registerServiceWorker'
 
+window.Promise = Promise
 const store = configureStore()
 
 // a short-term fix for data-provider, should get fixed in next release

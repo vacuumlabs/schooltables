@@ -6,8 +6,8 @@ router.use((req, res, next) => {
   next()
 })
 
-router.get('/', (req, res, next) => {
-  res.json({})
+router.get('/resources/:id', (req, res, next) => {
+  res.json({id: req.params.id})
 })
 
 module.exports = router

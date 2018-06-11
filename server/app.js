@@ -39,7 +39,7 @@ app.use('*', (req, res) => {
       console.error('read err', err)
       return res.status(404).end()
     }
-    res.send(htmlData)
+    return res.send(htmlData)
   })
 })
 
