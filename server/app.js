@@ -23,6 +23,11 @@ app.use(compression())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
 
+// must be before every other route to guarantee the redirect!
+if (process.env.FORCE_HTTPS === 'true') {
+  app.use(require('./middlewares/forceHttps'))
+}
+
 // Setup logger
 app.use(morgan('combined'))
 
