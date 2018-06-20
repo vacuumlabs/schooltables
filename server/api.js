@@ -8,7 +8,8 @@ router.use((req, res, next) => {
   next()
 })
 
-router.get('/resources/:id', async (req, res, next) => {
+// TODO get and complete survey
+router.get('/survey/:id', async (req, res, next) => {
   await db.raw('SELECT 1')
   res.json({id: req.params.id})
 })

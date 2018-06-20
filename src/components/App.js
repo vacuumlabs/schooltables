@@ -1,15 +1,23 @@
 import React from 'react'
 import {Route, Switch, Redirect} from 'react-router-dom'
-import Landing from './Landing'
+import Login from './Login'
 import Admin from './Admin'
-import Resource from './Resource'
+import Results from './Results'
+import Survey from './Survey'
+import SurveyList from './SurveyList'
+import Preview from './Preview'
+import Create from './Create'
 
 const App = () => (
   <Switch>
-    <Route path="/" exact component={Landing} />
-    <Route path="/admin" component={Admin} />
-    <Route path="/resource/:id" component={Resource} />
-    <Redirect to="/" />
+    <Route path="/" exact component={Admin} />
+    <Route path="/login" exact component={Login} />
+    <Route path="/create" component={Create} />
+    <Route path="/preview" component={Preview} />
+    <Route path="/surveys" component={SurveyList} />
+    <Route path="/survey/:id" component={Survey} />
+    <Route path="/results/:id" component={Results} />
+    <Redirect to="/admin" />
   </Switch>
 )
 
