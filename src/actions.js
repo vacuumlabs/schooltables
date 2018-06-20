@@ -132,6 +132,8 @@ export const submitCreate = (pushHistory) => async (dispatch, getState) => {
     const res = await fetch(`${process.env.REACT_APP_API_URL || ''}/api/create`, {
       method: 'POST',
       headers: new Headers({
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
         'X-Token': window.localStorage.getItem('token'),
       }),
       body: JSON.stringify(omit(getState().create, 'data')),

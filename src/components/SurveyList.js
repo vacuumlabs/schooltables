@@ -27,10 +27,10 @@ const styles = (theme) => ({
   },
 })
 
-const SurveyList = ({data}) => {
+const SurveyList = ({data, classes}) => {
   return (
-    <Paper className={this.props.classes.root}>
-      <Table className={this.props.classes.table}>
+    <Paper className={classes.root}>
+      <Table className={classes.table}>
         <TableHead>
           <TableRow>
             <TableCell>Datum</TableCell>
@@ -38,7 +38,7 @@ const SurveyList = ({data}) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row, i) => (
+          {Object.values(data).map((row, i) => (
             <TableRow key={i}>
               <TableCell>{row.date}</TableCell>
               <TableCell>
@@ -58,6 +58,6 @@ export default compose(
     return [surveyListProvider()]
   }),
   connect((state, props) => ({
-    data: state.surveys,
+    data: state.surveyList,
   }))
 )(SurveyList)

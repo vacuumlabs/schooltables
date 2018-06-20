@@ -40,8 +40,7 @@ router.post('/login', (req, res) => {
 })
 
 router.get('/surveys', async (req, res, next) => {
-  await db.raw('SELECT 1')
-  res.json({id: req.params.id})
+  res.json(await db('surveys'))
 })
 
 // TODO results and create
