@@ -100,11 +100,41 @@ export const addRow = (surveyId, tableId) => ({
   }),
 })
 
+export const login = (pushHistory, name, password) => async (dispatch, getState) => {
+  try {
+    console.log(name, password)
+    const res = await fetch(`${process.env.REACT_APP_API_URL || ''}/admin/login`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name,
+        password,
+      }),
+    })
+    if (res.ok) {
+      const body = await res.json()
+      window.localStorage.setItem('token', body.token)
+      pushHistory('/surveys')
+    } else {
+      console.log(res.status)
+      console.log(res.statusText)
+    }
+  } catch (e) {
+    console.log(e)
+  }
+}
+
 export const submitCreate = (pushHistory) => async (dispatch, getState) => {
   try {
     const res = await fetch(`${process.env.REACT_APP_API_URL || ''}/api/create`, {
       method: 'POST',
-      body: omit(getState().create, 'data'),
+      headers: new Headers({
+        'X-Token': window.localStorage.getItem('token'),
+      }),
+      body: JSON.stringify(omit(getState().create, 'data')),
     })
     if (res.ok) {
       const body = await res.json()

@@ -11,6 +11,9 @@ export const resourceProvider = (id) => ({
     `${process.env.REACT_APP_API_URL || ''}/api/resources/${id}`,
     {
       accept: 'application/json',
+      headers: new Headers({
+        'X-Token': window.localStorage.getItem('token'),
+      }),
     },
   ],
   onData: [dispatchReceivedData, ['resources']],
@@ -23,6 +26,9 @@ export const surveyListProvider = () => ({
     `${process.env.REACT_APP_API_URL || ''}/admin/surveys`,
     {
       accept: 'application/json',
+      headers: new Headers({
+        'X-Token': window.localStorage.getItem('token'),
+      }),
     },
   ],
   onData: [dispatchReceivedData, ['surveyList']],
@@ -35,6 +41,9 @@ export const surveyProvider = (id) => ({
     `${process.env.REACT_APP_API_URL || ''}/api/surveys/${id}`,
     {
       accept: 'application/json',
+      headers: new Headers({
+        'X-Token': window.localStorage.getItem('token'),
+      }),
     },
   ],
   onData: [dispatchReceivedData, ['surveys']],
@@ -47,6 +56,9 @@ export const resultsProvider = (id) => ({
     `${process.env.REACT_APP_API_URL || ''}/admin/results/${id}`,
     {
       accept: 'application/json',
+      headers: new Headers({
+        'X-Token': window.localStorage.getItem('token'),
+      }),
     },
   ],
   onData: [dispatchReceivedData, ['results']],

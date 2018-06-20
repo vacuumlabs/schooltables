@@ -20,11 +20,6 @@ const app = express()
 // Support Gzip
 app.use(compression())
 
-app.use(require('cookie-parser')())
-app.use(
-  require('express-session')({secret: 'keyboard cat', resave: false, saveUninitialized: false})
-)
-
 // Support post requests with body data (doesn't support multipart, use multer)
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
