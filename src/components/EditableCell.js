@@ -5,15 +5,11 @@ import {compose} from 'redux'
 import {connect} from 'react-redux'
 import {get} from 'lodash'
 import {withHandlers, withProps} from 'recompose'
-import {updateValue, setActiveCell} from '../actions'
+import {updateValue} from '../actions'
 
-const EditableCell = ({value, active, editable, onChange, setActive}) => (
-  <TableCell onClick={editable ? setActive : null}>
-    {active ? (
-      <TextField value={value == null ? '' : value} margin="normal" onChange={onChange} />
-    ) : (
-      value
-    )}
+const EditableCell = ({value, onChange}) => (
+  <TableCell>
+    <TextField value={value == null ? '' : value} margin="normal" onChange={onChange} />
   </TableCell>
 )
 
@@ -22,11 +18,10 @@ export default compose(
     (state, props) => ({
       stateValue: get(state, props.path),
     }),
-    {updateValue, setActiveCell}
+    {updateValue}
   ),
   withProps(({stateValue}) => ({value: stateValue == null ? '' : stateValue})),
   withHandlers({
     onChange: ({path, updateValue}) => (e) => updateValue(path, e.target.value),
-    setActive: ({path, setActiveCell}) => (e) => setActiveCell(path),
   })
 )(EditableCell)

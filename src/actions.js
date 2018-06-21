@@ -41,7 +41,10 @@ export const clearStoredData = (path) => ({
 export const loadOrClear = (path) => ({
   type: 'Load from store or reset',
   path,
-  reducer: () => window.localStorage.getItem(path) || get(getInitialState(), path),
+  reducer: () =>
+    window.localStorage.getItem(path)
+      ? JSON.parse(window.localStorage.getItem(path))
+      : get(getInitialState(), path),
 })
 
 export const addRectangular = () => ({
@@ -51,7 +54,7 @@ export const addRectangular = () => ({
 })
 
 export const addStandard = () => ({
-  type: 'Add Rectangular table',
+  type: 'Add Standard table',
   path: 'create.tables',
   reducer: (tables) => tables.concat(emptyStandard),
 })
@@ -86,18 +89,27 @@ export const generateEmptyData = (path) => ({
 
 // only possible on create, index is for tables arr
 export const addColumn = (i) => ({
-  type: 'Add column to standard table',
+  type: `Add column to table ${i}`,
   path: `create.tables[${i}].header`,
   reducer: (header) => header.concat(''),
 })
 
-export const addRow = (surveyId, tableId) => ({
-  type: `Add row to table ${tableId}`,
-  path: `${surveyId}.tables[${tableId}]`,
-  reducer: (table) => ({
-    ...table,
-    data: table.data.concat([...Array(table.header.length)].map((c) => '')),
-  }),
+export const addColumnOnPath = (path) => ({
+  type: `Add column to table ${path}`,
+  path: `${path}.header`,
+  reducer: (header) => header.concat(''),
+})
+
+export const addRowOnPathCreate = (path) => ({
+  type: `Add column to table ${path}`,
+  path: `${path}.side`,
+  reducer: (side) => side.concat(''),
+})
+
+export const addRowOnPathSurvey = (path) => ({
+  type: `Add row to table ${path}`,
+  path,
+  reducer: (data) => data.concat([...Array(data[0].length)].map((c) => '')),
 })
 
 export const login = (pushHistory, name, password) => async (dispatch, getState) => {

@@ -3,6 +3,8 @@ import {get} from 'lodash'
 import {compose} from 'redux'
 import {connect} from 'react-redux'
 import {withStyles} from '@material-ui/core/styles'
+import {withHandlers} from 'recompose'
+import {addColumnOnPath, addRowOnPathCreate} from '../actions'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
@@ -27,12 +29,12 @@ const styles = (theme) => ({
   },
 })
 
-const CreateStandard = ({path, data}) => (
-  <Table className={this.props.classes.table}>
+const CreateStandard = ({path, data, classes, addColumn}) => (
+  <Table className={classes.table}>
     <TableHead>
       <TableRow>
         <CellRow path={`${path}.header`} />
-        <IconButton className={this.props.iconButton} onClick={this.props.addColumn}>
+        <IconButton onClick={addColumn}>
           <AddIcon />
         </IconButton>
       </TableRow>
@@ -45,7 +47,13 @@ const CreateStandard = ({path, data}) => (
 
 export default compose(
   withStyles(styles),
-  connect((state, props) => ({
-    data: get(state, `${props.path}.header`),
-  }))
+  connect(
+    (state, props) => ({
+      data: get(state, `${props.path}.header`),
+    }),
+    {addColumnOnPath}
+  ),
+  withHandlers({
+    addColumn: ({path, addColumnOnPath}) => () => addColumnOnPath(path),
+  })
 )(CreateStandard)

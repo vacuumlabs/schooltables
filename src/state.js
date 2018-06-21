@@ -1,16 +1,19 @@
 export const emptyRectangular = {
-  header: [],
-  side: [],
+  type: 'rectangular',
+  header: [''],
+  side: [''],
   data: [[]],
 }
 
 export const emptyHeader = {
-  side: [],
+  type: 'header',
+  side: [''],
   data: [],
 }
 
 export const emptyStandard = {
-  side: [],
+  type: 'standard',
+  header: [''],
   data: [],
 }
 

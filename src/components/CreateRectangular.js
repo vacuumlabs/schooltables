@@ -2,6 +2,8 @@ import React from 'react'
 import {get} from 'lodash'
 import {compose} from 'redux'
 import {connect} from 'react-redux'
+import {withHandlers} from 'recompose'
+import {addColumnOnPath, addRowOnPathCreate} from '../actions'
 import {withStyles} from '@material-ui/core/styles'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -22,35 +24,32 @@ const styles = (theme) => ({
   table: {
     minWidth: 700,
   },
-  iconButton: {
-    position: 'absolute',
-    right: '-20px',
-  },
 })
 
-const CreateRectangular = ({path, header, side, activeCell}) => (
-  <Table className={this.props.classes.table}>
+const CreateRectangular = ({path, header, side, activeCell, classes, addColumn, addRow}) => (
+  <Table className={classes.table}>
     <TableHead>
       <TableRow>
+        <TableCell />
         <CellRow path={`${path}.header`} />
-        <IconButton className={this.props.iconButton} onClick={this.props.addColumn}>
+        <IconButton onClick={addColumn}>
           <AddIcon />
         </IconButton>
       </TableRow>
     </TableHead>
     <TableBody>
       {side.map((_, i) => (
-        <TableRow key={i}>
+        <TableRow key={`row_${i}`}>
           <EditableCell
-            key={i}
+            key={`cell_${i}`}
             path={`${path}.side[${i}]`}
             active={activeCell === `${path}.side[${i}]`}
           />
-          {header.map((_, i) => <TableCell key={`_${i}`}>...</TableCell>)}
+          {header.map((_, i) => <TableCell key={`other_cell_${i}`}>...</TableCell>)}
         </TableRow>
       ))}
     </TableBody>
-    <IconButton className={this.props.iconButton} onClick={this.props.addColumn}>
+    <IconButton onClick={addRow}>
       <AddIcon />
     </IconButton>
   </Table>
@@ -58,9 +57,16 @@ const CreateRectangular = ({path, header, side, activeCell}) => (
 
 export default compose(
   withStyles(styles),
-  connect((state, props) => ({
-    header: get(state, `${props.path}.header`),
-    side: get(state, `${props.path}.side`),
-    activeCell: state.activeCellPath,
-  }))
+  connect(
+    (state, props) => ({
+      header: get(state, `${props.path}.header`),
+      side: get(state, `${props.path}.side`),
+      activeCell: state.activeCellPath,
+    }),
+    {addColumnOnPath, addRowOnPathCreate}
+  ),
+  withHandlers({
+    addColumn: ({path, addColumnOnPath}) => () => addColumnOnPath(path),
+    addRow: ({path, addRowOnPathCreate}) => () => addRowOnPathCreate(path),
+  })
 )(CreateRectangular)

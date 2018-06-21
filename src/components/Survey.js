@@ -57,11 +57,11 @@ class Survey extends React.Component {
           const tablePath = `${path}.tables[${i}]`
           switch (t.type) {
             case 'header':
-              return <Header path={tablePath} />
+              return <Header key={i} path={tablePath} />
             case 'standard':
-              return <Standard path={tablePath} />
-            case 'Rectangular':
-              return <Rectangular path={tablePath} />
+              return <Standard key={i} path={tablePath} />
+            case 'rectangular':
+              return <Rectangular key={i} path={tablePath} />
             default:
               return null
           }

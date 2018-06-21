@@ -2,6 +2,7 @@ import React from 'react'
 import {get} from 'lodash'
 import {compose} from 'redux'
 import {connect} from 'react-redux'
+import {withHandlers} from 'recompose'
 import {withStyles} from '@material-ui/core/styles'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -10,7 +11,7 @@ import TableRow from '@material-ui/core/TableRow'
 import IconButton from '@material-ui/core/IconButton'
 import AddIcon from '@material-ui/icons/Add'
 import CellRow from './CellRow'
-import {addRow} from '../actions'
+import {addRowOnPathSurvey} from '../actions'
 
 const styles = (theme) => ({
   root: {
@@ -27,7 +28,7 @@ const styles = (theme) => ({
   },
 })
 
-const CreateStandard = ({path, data, addRow}) => (
+const Standard = ({path, data, addRow}) => (
   <Table className={this.props.classes.table}>
     <TableHead>
       <TableRow>
@@ -53,6 +54,9 @@ export default compose(
     (state, props) => ({
       data: get(state, `${props.path}.header`),
     }),
-    {addRow}
-  )
-)(CreateStandard)
+    {addRowOnPathSurvey}
+  ),
+  withHandlers({
+    addRow: ({path, addRowOnPathSurvey}) => () => addRowOnPathSurvey(path),
+  })
+)(Standard)

@@ -45,16 +45,20 @@ class CreateSurvey extends React.Component {
   }
 
   componentDidMount = () => {
-    this.props.loadOrClear('create')
+    //this.props.loadOrClear('create')
   }
 
-  getDerivedStateFromProps = (props) => {
-    window.localStorage.setItem('create', props.data)
+  static getDerivedStateFromProps = (props) => {
+    if (props.data) {
+      window.localStorage.setItem('create', JSON.stringify(props.data))
+    }
+    return null
   }
 
   render = () => {
     const path = 'create'
-    const {tables, classes, deleteCreate, submitCreate, addRectangular, addStandard} = this.props
+    const {data, classes, deleteCreate, submitCreate, addRectangular, addStandard} = this.props
+    const {tables} = data
     return (
       <Paper className={classes.root}>
         <Title path={path} />
@@ -62,18 +66,18 @@ class CreateSurvey extends React.Component {
           const tablePath = `${path}.tables[${i}]`
           switch (t.type) {
             case 'header':
-              return <CreateHeader path={tablePath} />
+              return <CreateHeader key={`table_${i}`} path={tablePath} />
             case 'standard':
-              return <CreateStandard path={tablePath} />
-            case 'Rectangular':
-              return <CreateRectangular path={tablePath} />
+              return <CreateStandard key={`table_${i}`} path={tablePath} />
+            case 'rectangular':
+              return <CreateRectangular key={`table_${i}`} path={tablePath} />
             default:
               return null
           }
         })}
         <Button variant="outlined" className={classes.button} onClick={addRectangular}>
           <ViewQuilt className={classes.leftIcon} />
-          Rectangular tabulka
+          2D tabulka
         </Button>
         <Button variant="outlined" className={classes.button} onClick={addStandard}>
           <ViewStream className={classes.leftIcon} />
@@ -97,7 +101,7 @@ export default compose(
   withStyles(styles),
   connect(
     (state, props) => ({
-      tables: get(state, `${props.path}.tables`),
+      data: state.create,
     }),
     {addRectangular, addStandard, clearStoredData, loadOrClear, submitCreate}
   ),
