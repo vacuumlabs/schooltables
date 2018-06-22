@@ -5,7 +5,7 @@ import {branch, withHandlers} from 'recompose'
 import {withRouter} from 'react-router-dom'
 import {withDataProviders} from 'data-provider'
 import {get} from 'lodash'
-import {submitSurvey, clearStoredData} from '../actions'
+import {submitSurvey, clearStoredData, loadOrClearSurvey} from '../actions'
 import {paramsOrCreateSelector} from '../selectors'
 import {surveyProvider} from '../dataProviders'
 import {withStyles} from '@material-ui/core/styles'
@@ -36,18 +36,25 @@ const styles = (theme) => ({
 class Survey extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {activeId: undefined}
+    this.state = {loaded: false}
   }
 
   componentDidMount = () => {
-    this.props.loadOrClear('create')
+    this.props.loadOrClearSurvey(paramsOrCreateSelector(undefined, this.props))
+    this.setState({loaded: true})
   }
 
-  getDerivedStateFromProps = (props) => {
-    window.localStorage.setItem('create', props.data)
+  static getDerivedStateFromProps = (props) => {
+    const id = paramsOrCreateSelector(undefined, props)
+    if (id !== 'create') {
+      window.localStorage.setItem(id, props.data)
+    }
+    return null
   }
 
   render = () => {
+    // skip first render
+    if (!this.state.loaded) return null
     const {path, data, classes, submitSurvey, deleteSurvey} = this.props
     const {tables} = data
     return (
@@ -57,11 +64,11 @@ class Survey extends React.Component {
           const tablePath = `${path}.tables[${i}]`
           switch (t.type) {
             case 'header':
-              return <Header key={i} path={tablePath} />
+              return <Header key={`talbe_${i}`} path={tablePath} />
             case 'standard':
-              return <Standard key={i} path={tablePath} />
+              return <Standard key={`talbe_${i}`} path={tablePath} />
             case 'rectangular':
-              return <Rectangular key={i} path={tablePath} />
+              return <Rectangular key={`talbe_${i}`} path={tablePath} />
             default:
               return null
           }
@@ -95,10 +102,10 @@ export default compose(
   ),
   connect(
     (state, props) => ({
-      data: get(state, props.path),
-      activeCell: state.activeCellPath,
+      data: get(state, paramsOrCreateSelector(undefined, props)),
+      path: paramsOrCreateSelector(undefined, props),
     }),
-    {submitSurvey, clearStoredData}
+    {submitSurvey, clearStoredData, loadOrClearSurvey}
   ),
   withHandlers({
     deleteSurvey: ({clearStoredData}) => () => clearStoredData('create'),

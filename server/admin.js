@@ -39,6 +39,15 @@ router.post('/login', (req, res) => {
   }
 })
 
+router.post('/create', async (req, res) => {
+  const test = await db('surveys')
+    .insert({
+      created_at: Date.now(),
+      data: JSON.stringify(req.body),
+    })
+    .returning('id')
+})
+
 router.get('/surveys', async (req, res, next) => {
   res.json(await db('surveys'))
 })

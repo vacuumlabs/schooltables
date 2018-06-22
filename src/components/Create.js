@@ -2,7 +2,7 @@ import React from 'react'
 import {compose} from 'redux'
 import {connect} from 'react-redux'
 import {withHandlers} from 'recompose'
-import {withRouter} from 'react-router-dom'
+import {withRouter, Link} from 'react-router-dom'
 import {get} from 'lodash'
 import {withStyles} from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
@@ -11,7 +11,13 @@ import ViewQuilt from '@material-ui/icons/ViewQuilt'
 import ViewStream from '@material-ui/icons/ViewStream'
 import Delete from '@material-ui/icons/Delete'
 import Check from '@material-ui/icons/Check'
-import {clearStoredData, loadOrClear, addRectangular, addStandard, submitCreate} from '../actions'
+import {
+  clearStoredData,
+  loadOrClearSurvey,
+  addRectangular,
+  addStandard,
+  submitCreate,
+} from '../actions'
 import Title from './Title'
 import CreateHeader from './CreateHeader'
 import CreateStandard from './CreateStandard'
@@ -45,7 +51,7 @@ class CreateSurvey extends React.Component {
   }
 
   componentDidMount = () => {
-    //this.props.loadOrClear('create')
+    //this.props.loadOrClearSurvey('create')
   }
 
   static getDerivedStateFromProps = (props) => {
@@ -83,6 +89,12 @@ class CreateSurvey extends React.Component {
           <ViewStream className={classes.leftIcon} />
           Standard tabulka
         </Button>
+        <Link to="/preview">
+          <Button variant="outlined" className={classes.button}>
+            <Check className={classes.leftIcon} />
+            Preview
+          </Button>
+        </Link>
         <Button variant="outlined" className={classes.button} onClick={deleteCreate}>
           <Delete className={classes.leftIcon} />
           Zmazat formular
@@ -103,7 +115,7 @@ export default compose(
     (state, props) => ({
       data: state.create,
     }),
-    {addRectangular, addStandard, clearStoredData, loadOrClear, submitCreate}
+    {addRectangular, addStandard, clearStoredData, loadOrClearSurvey, submitCreate}
   ),
   withHandlers({
     delete: ({path, clearStoredData}) => () => clearStoredData(path),

@@ -14,23 +14,10 @@ import IconButton from '@material-ui/core/IconButton'
 import AddIcon from '@material-ui/icons/Add'
 import CellRow from './CellRow'
 
-const styles = (theme) => ({
-  root: {
-    width: '100%',
-    marginTop: theme.spacing.unit * 3,
-    overflowX: 'auto',
-  },
-  table: {
-    minWidth: 700,
-  },
-  iconButton: {
-    position: 'absolute',
-    right: '-20px',
-  },
-})
+const styles = (theme) => ({})
 
 const CreateStandard = ({path, data, classes, addColumn}) => (
-  <Table className={classes.table}>
+  <Table>
     <TableHead>
       <TableRow>
         <CellRow path={`${path}.header`} />

@@ -6,52 +6,28 @@ import {withStyles} from '@material-ui/core/styles'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableHead from '@material-ui/core/TableHead'
+import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
-import IconButton from '@material-ui/core/IconButton'
-import AddIcon from '@material-ui/icons/Add'
 import CellRow from './CellRow'
-import EditableCell from './EditableCell'
 
-const styles = (theme) => ({
-  root: {
-    width: '100%',
-    marginTop: theme.spacing.unit * 3,
-    overflowX: 'auto',
-  },
-  table: {
-    minWidth: 700,
-  },
-  iconButton: {
-    position: 'absolute',
-    right: '-20px',
-  },
-})
+const styles = (theme) => ({})
 
-const Rectangular = ({path, header, side, activeCell}) => (
-  <Table className={this.props.classes.table}>
+const Rectangular = ({path, header, side, classes}) => (
+  <Table>
     <TableHead>
       <TableRow>
-        <CellRow path={`${path}.header`} editable={false} />
-        <IconButton className={this.props.iconButton} onClick={this.props.addColumn}>
-          <AddIcon />
-        </IconButton>
+        <TableCell />
+        {header.map((c, i) => <TableCell key={i}>{c}</TableCell>)}
       </TableRow>
     </TableHead>
     <TableBody>
-      {side.map((_, i) => (
+      {side.map((c, i) => (
         <TableRow key={`_${i}`}>
-          <EditableCell
-            key={i}
-            path={`${path}.side[${i}]`}
-            active={activeCell === `${path}.side[${i}]`}
-          />
+          <TableCell key={i}>{c}</TableCell>
           <CellRow path={`${path}.data[${i}]`} />
         </TableRow>
       ))}
     </TableBody>
-    <IconButton className={this.props.iconButton} onClick={this.props.addColumn}>
-      <AddIcon />
-    </IconButton>
   </Table>
 )
 
@@ -60,6 +36,5 @@ export default compose(
   connect((state, props) => ({
     header: get(state, `${props.path}.header`),
     side: get(state, `${props.path}.side`),
-    activeCell: state.activeCellPath,
   }))
 )(Rectangular)

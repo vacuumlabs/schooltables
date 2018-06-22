@@ -3,7 +3,9 @@ import {createSelector} from 'reselect'
 export const paramsIdSelector = (_, props) => props.match.params.id || '0'
 
 export const paramsOrCreateSelector = (_, props) =>
-  props.match.path.indexOf('create') !== -1 ? 'create' : props.match.params.id || '0'
+  console.log(props.match.path) || props.match.path.indexOf('preview') !== -1
+    ? 'create'
+    : props.match.params.id
 
 export const resourcesSelector = (state) => state.resources
 export const surveysSelector = (state) => state.resources

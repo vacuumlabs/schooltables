@@ -38,13 +38,38 @@ export const clearStoredData = (path) => ({
   },
 })
 
-export const loadOrClear = (path) => ({
+export const loadOrClearSurvey = (path) => ({
   type: 'Load from store or reset',
   path,
-  reducer: () =>
-    window.localStorage.getItem(path)
-      ? JSON.parse(window.localStorage.getItem(path))
-      : get(getInitialState(), path),
+  reducer: (survey) => {
+    const saved = window.localStorage.getItem(path)
+    if (path !== 'create' && saved) return JSON.parse(saved)
+    const tables = survey.tables.map((table) => {
+      switch (table.type) {
+        case 'header':
+          return {
+            ...table,
+            data: table.side.map((_) => ''),
+          }
+        case 'standard':
+          return {
+            ...table,
+            data: createEmptyRectangularData(table.header.length),
+          }
+        case 'rectangular':
+          return {
+            ...table,
+            data: createEmptyRectangularData(table.header.length, table.side.length),
+          }
+        default:
+          return table
+      }
+    })
+    return {
+      ...survey,
+      tables,
+    }
+  },
 })
 
 export const addRectangular = () => ({
@@ -67,19 +92,7 @@ export const generateEmptyData = (path) => ({
   path,
   reducer: (table) => {
     let data
-    switch (table.type) {
-      case 'header':
-        data = table.side.map((_) => '')
-        break
-      case 'standard':
-        data = createEmptyRectangularData(table.header.length)
-        break
-      case 'Rectangular':
-        data = createEmptyRectangularData(table.header.length, table.side.length)
-        break
-      default:
-        console.log('generateEmptyData - should not happen')
-    }
+
     return {
       ...table,
       data,
@@ -141,7 +154,7 @@ export const login = (pushHistory, name, password) => async (dispatch, getState)
 
 export const submitCreate = (pushHistory) => async (dispatch, getState) => {
   try {
-    const res = await fetch(`${process.env.REACT_APP_API_URL || ''}/api/create`, {
+    const res = await fetch(`${process.env.REACT_APP_API_URL || ''}/admin/create`, {
       method: 'POST',
       headers: new Headers({
         'Accept': 'application/json',

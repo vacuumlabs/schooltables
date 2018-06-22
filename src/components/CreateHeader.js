@@ -13,22 +13,11 @@ import AddIcon from '@material-ui/icons/Add'
 import EditableCell from './EditableCell'
 import {addRowOnPathCreate} from '../actions'
 
-const styles = (theme) => ({
-  root: {
-    width: '100%',
-    marginTop: theme.spacing.unit * 3,
-    overflowX: 'auto',
-  },
-  table: {},
-  iconButton: {
-    position: 'absolute',
-    bottom: '-20px',
-  },
-})
+const styles = (theme) => ({})
 
 const CreateHeader = ({path, data, activeCell, addRow, classes}) => (
   <Fragment>
-    <Table className={classes.table}>
+    <Table>
       <TableBody>
         {data.map((_, i) => (
           <TableRow key={i}>

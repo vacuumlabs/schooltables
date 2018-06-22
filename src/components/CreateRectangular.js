@@ -15,19 +15,10 @@ import AddIcon from '@material-ui/icons/Add'
 import CellRow from './CellRow'
 import EditableCell from './EditableCell'
 
-const styles = (theme) => ({
-  root: {
-    width: '100%',
-    marginTop: theme.spacing.unit * 3,
-    overflowX: 'auto',
-  },
-  table: {
-    minWidth: 700,
-  },
-})
+const styles = (theme) => ({})
 
-const CreateRectangular = ({path, header, side, activeCell, classes, addColumn, addRow}) => (
-  <Table className={classes.table}>
+const CreateRectangular = ({path, header, side, classes, addColumn, addRow}) => (
+  <Table>
     <TableHead>
       <TableRow>
         <TableCell />
@@ -40,11 +31,7 @@ const CreateRectangular = ({path, header, side, activeCell, classes, addColumn, 
     <TableBody>
       {side.map((_, i) => (
         <TableRow key={`row_${i}`}>
-          <EditableCell
-            key={`cell_${i}`}
-            path={`${path}.side[${i}]`}
-            active={activeCell === `${path}.side[${i}]`}
-          />
+          <EditableCell key={`cell_${i}`} path={`${path}.side[${i}]`} />
           {header.map((_, i) => <TableCell key={`other_cell_${i}`}>...</TableCell>)}
         </TableRow>
       ))}
@@ -61,7 +48,6 @@ export default compose(
     (state, props) => ({
       header: get(state, `${props.path}.header`),
       side: get(state, `${props.path}.side`),
-      activeCell: state.activeCellPath,
     }),
     {addColumnOnPath, addRowOnPathCreate}
   ),

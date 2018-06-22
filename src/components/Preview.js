@@ -12,10 +12,6 @@ const styles = (theme) => ({
   table: {
     minWidth: 700,
   },
-  iconButton: {
-    position: 'absolute',
-    bottom: '-20px',
-  },
 })
 
 const Preview = ({classes, root}) => (

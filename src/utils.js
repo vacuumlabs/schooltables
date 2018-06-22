@@ -39,5 +39,8 @@ export const createEmptyRectangularData = (columns, rows = 1) => {
   for (let i = 0; i < rows; i++) {
     result.push([...Array(columns)].map((c) => ''))
   }
+  console.log('create empty')
+  console.log(columns)
+  console.log(result)
   return result
 }

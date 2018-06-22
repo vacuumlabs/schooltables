@@ -9,28 +9,15 @@ import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
 import EditableCell from './EditableCell'
 
-const styles = (theme) => ({
-  root: {
-    width: '100%',
-    marginTop: theme.spacing.unit * 3,
-    overflowX: 'auto',
-  },
-  table: {
-    minWidth: 700,
-  },
-  iconButton: {
-    position: 'absolute',
-    bottom: '-20px',
-  },
-})
+const styles = (theme) => ({})
 
-const Header = ({path, data, side, activeCell}) => (
-  <Table className={this.props.classes.table}>
+const Header = ({path, data, side, activeCell, classes}) => (
+  <Table className={classes.table}>
     <TableBody>
       {side.map((val, i) => (
         <TableRow key={i}>
           <TableCell>{val}</TableCell>
-          <EditableCell path={`${path}.data[${i}]`} active={activeCell === `${path}.side[${i}]`} />
+          <EditableCell path={`${path}.data[${i}]`} />
         </TableRow>
       ))}
     </TableBody>
