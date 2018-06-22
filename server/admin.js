@@ -40,22 +40,34 @@ router.post('/login', (req, res) => {
 })
 
 router.post('/create', async (req, res) => {
+  console.log('got here?')
   const test = await db('surveys')
     .insert({
-      created_at: Date.now(),
+      created_at: new Date().toISOString(),
       data: JSON.stringify(req.body),
     })
     .returning('id')
+  console.log('and here?')
+  console.log(test[0])
+  console.log(
+    await db('surveys')
+      .select('*')
+      .where('id', test[0])
+  )
+  res.json({id: test[0]})
 })
 
 router.get('/surveys', async (req, res, next) => {
   res.json(await db('surveys'))
 })
 
-// TODO results and create
 router.get('/results/:id', async (req, res, next) => {
   await db.raw('SELECT 1')
-  res.json({id: req.params.id})
+  res.json(
+    await db('results')
+      .select('*')
+      .where('id', req.params.id)
+  )
 })
 
 module.exports = router

@@ -1,7 +1,7 @@
 import React, {Fragment} from 'react'
 import {compose} from 'redux'
 import {connect} from 'react-redux'
-import {branch, withHandlers} from 'recompose'
+import {branch, withHandlers, withProps} from 'recompose'
 import {withRouter} from 'react-router-dom'
 import {withDataProviders} from 'data-provider'
 import {get} from 'lodash'
@@ -46,8 +46,8 @@ class Survey extends React.Component {
 
   static getDerivedStateFromProps = (props) => {
     const id = paramsOrCreateSelector(undefined, props)
-    if (id !== 'create') {
-      window.localStorage.setItem(id, props.data)
+    if (id !== 'create' && props.data) {
+      window.localStorage.setItem(id, JSON.stringify(props.data))
     }
     return null
   }
@@ -94,20 +94,21 @@ class Survey extends React.Component {
 export default compose(
   withStyles(styles),
   withRouter,
+  withProps((props) => ({id: paramsOrCreateSelector(undefined, props)})),
   branch(
-    (props) => paramsOrCreateSelector(undefined, props) !== 'create',
+    (props) => props.id !== 'create',
     withDataProviders((props) => {
-      return [surveyProvider(paramsOrCreateSelector(undefined, props))]
+      return [surveyProvider(props.id)]
     })
   ),
   connect(
     (state, props) => ({
-      data: get(state, paramsOrCreateSelector(undefined, props)),
-      path: paramsOrCreateSelector(undefined, props),
+      data: get(state, props.id),
+      path: props.id,
     }),
     {submitSurvey, clearStoredData, loadOrClearSurvey}
   ),
   withHandlers({
-    deleteSurvey: ({clearStoredData}) => () => clearStoredData('create'),
+    deleteSurvey: ({clearStoredData, id}) => () => clearStoredData(id),
   })
 )(Survey)

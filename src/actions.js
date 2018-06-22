@@ -12,7 +12,7 @@ export const receiveData = (
   type: `Received data from ${dataProviderRef}`,
   path,
   payload: data,
-  reducer: (state, data) => ({...state, ...mappingFn(data, ...mappingFnArgs)}),
+  reducer: (state, data) => console.log(state) || {...state, ...mappingFn(data, ...mappingFnArgs)},
 })
 
 export const updateValue = (path, data) => ({
@@ -32,9 +32,33 @@ export const setActiveCell = (path) => ({
 export const clearStoredData = (path) => ({
   type: 'Clear stored data',
   path,
-  reducer: (state) => {
+  reducer: (survey) => {
     window.localStorage.removeItem(path)
-    return get(getInitialState(), path)
+    const tables = survey.tables.map((table) => {
+      switch (table.type) {
+        case 'header':
+          return {
+            ...table,
+            data: table.side.map((_) => ''),
+          }
+        case 'standard':
+          return {
+            ...table,
+            data: createEmptyRectangularData(table.header.length),
+          }
+        case 'rectangular':
+          return {
+            ...table,
+            data: createEmptyRectangularData(table.header.length, table.side.length),
+          }
+        default:
+          return table
+      }
+    })
+    return {
+      ...survey,
+      tables,
+    }
   },
 })
 
@@ -87,15 +111,35 @@ export const addStandard = () => ({
 // TODO this and other dialogs
 export const setError = () => ({})
 
-export const generateEmptyData = (path) => ({
+// TODO helper func
+export const clearSurveyData = (path) => ({
   type: 'Generate data from header/side',
   path,
-  reducer: (table) => {
-    let data
-
+  reducer: (survey) => {
+    const tables = survey.tables.map((table) => {
+      switch (table.type) {
+        case 'header':
+          return {
+            ...table,
+            data: table.side.map((_) => ''),
+          }
+        case 'standard':
+          return {
+            ...table,
+            data: createEmptyRectangularData(table.header.length),
+          }
+        case 'rectangular':
+          return {
+            ...table,
+            data: createEmptyRectangularData(table.header.length, table.side.length),
+          }
+        default:
+          return table
+      }
+    })
     return {
-      ...table,
-      data,
+      ...survey,
+      tables,
     }
   },
 })
@@ -153,6 +197,7 @@ export const login = (pushHistory, name, password) => async (dispatch, getState)
 }
 
 export const submitCreate = (pushHistory) => async (dispatch, getState) => {
+  dispatch(clearSurveyData('create'))
   try {
     const res = await fetch(`${process.env.REACT_APP_API_URL || ''}/admin/create`, {
       method: 'POST',

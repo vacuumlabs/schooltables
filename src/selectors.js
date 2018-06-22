@@ -8,7 +8,8 @@ export const paramsOrCreateSelector = (_, props) =>
     : props.match.params.id
 
 export const resourcesSelector = (state) => state.resources
-export const surveysSelector = (state) => state.resources
+// surveys on root
+export const surveysSelector = (state) => state
 export const allResultsSelector = (state) => state.resources
 
 export const surveySelector = createSelector(

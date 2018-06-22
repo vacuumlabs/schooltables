@@ -63,7 +63,7 @@ class CreateSurvey extends React.Component {
 
   render = () => {
     const path = 'create'
-    const {data, classes, deleteCreate, submitCreate, addRectangular, addStandard} = this.props
+    const {data, classes, deleteForm, submitForm, addRectangular, addStandard} = this.props
     const {tables} = data
     return (
       <Paper className={classes.root}>
@@ -95,11 +95,11 @@ class CreateSurvey extends React.Component {
             Preview
           </Button>
         </Link>
-        <Button variant="outlined" className={classes.button} onClick={deleteCreate}>
+        <Button variant="outlined" className={classes.button} onClick={deleteForm}>
           <Delete className={classes.leftIcon} />
           Zmazat formular
         </Button>
-        <Button variant="outlined" className={classes.button} onClick={submitCreate}>
+        <Button variant="outlined" className={classes.button} onClick={submitForm}>
           <Check className={classes.leftIcon} />
           Dokoncit formular
         </Button>
@@ -118,7 +118,7 @@ export default compose(
     {addRectangular, addStandard, clearStoredData, loadOrClearSurvey, submitCreate}
   ),
   withHandlers({
-    delete: ({path, clearStoredData}) => () => clearStoredData(path),
-    submit: ({submitCreate, history}) => () => submitCreate(history.push),
+    deleteForm: ({clearStoredData}) => () => clearStoredData('create'),
+    submitForm: ({submitCreate, history}) => () => submitCreate(history.push),
   })
 )(CreateSurvey)

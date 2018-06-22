@@ -38,7 +38,7 @@ export const surveyProvider = (id) => ({
   ref: `survey-${id}`,
   getData: [
     fetch,
-    `${process.env.REACT_APP_API_URL || ''}/api/surveys/${id}`,
+    `${process.env.REACT_APP_API_URL || ''}/api/survey/${id}`,
     {
       accept: 'application/json',
       headers: new Headers({
@@ -46,7 +46,7 @@ export const surveyProvider = (id) => ({
       }),
     },
   ],
-  onData: [dispatchReceivedData, ['surveys']],
+  onData: [dispatchReceivedData],
 })
 
 export const resultsProvider = (id) => ({
