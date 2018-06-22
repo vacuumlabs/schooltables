@@ -1,27 +1,39 @@
 import React from 'react'
 import TableCell from '@material-ui/core/TableCell'
 import TextField from '@material-ui/core/TextField'
+import DeleteIcon from '@material-ui/icons/Delete'
+import Tooltip from '@material-ui/core/Tooltip'
+import IconButton from '@material-ui/core/IconButton'
 import {compose} from 'redux'
 import {connect} from 'react-redux'
 import {get} from 'lodash'
 import {withHandlers, withProps} from 'recompose'
-import {updateValue} from '../actions'
+import {updateValue, removeIndexOnPath} from '../actions'
 
-const EditableCell = ({value, onChange}) => (
+const EditableCell = ({value, onChange, onDelete, children, showDelete}) => (
   <TableCell>
     <TextField value={value == null ? '' : value} margin="normal" onChange={onChange} />
+    {showDelete && (
+      <Tooltip id="tooltip-icon" title="Delete">
+        <IconButton aria-label="Delete" onClick={onDelete}>
+          <DeleteIcon />
+        </IconButton>
+      </Tooltip>
+    )}
   </TableCell>
 )
 
 export default compose(
   connect(
     (state, props) => ({
-      stateValue: get(state, props.path),
+      stateValue: get(state, props.path)[props.index],
     }),
-    {updateValue}
+    {updateValue, removeIndexOnPath}
   ),
-  withProps(({stateValue}) => ({value: stateValue == null ? '' : stateValue})),
+  withProps(({stateValue, path}) => ({value: stateValue == null ? '' : stateValue})),
   withHandlers({
-    onChange: ({path, updateValue}) => (e) => updateValue(path, e.target.value),
+    onChange: ({path, updateValue, index}) => (e) =>
+      updateValue(`${path}[${index}]`, e.target.value),
+    onDelete: ({path, removeIndexOnPath, index}) => (e) => removeIndexOnPath(index, path),
   })
 )(EditableCell)

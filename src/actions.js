@@ -169,6 +169,16 @@ export const addRowOnPathSurvey = (path) => ({
   reducer: (data) => data.concat([...Array(data[0].length)].map((c) => '')),
 })
 
+export const removeIndexOnPath = (i, path) => ({
+  type: `Remove idx ${i} in ${path}`,
+  path,
+  reducer: (arr) => {
+    const newArr = arr.slice()
+    newArr.splice(i, 1)
+    return newArr
+  },
+})
+
 export const login = (pushHistory, name, password) => async (dispatch, getState) => {
   try {
     console.log(name, password)

@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import {get} from 'lodash'
 import EditableCell from './EditableCell'
 
-const CellRow = ({row, path}) => row.map((c, i) => <EditableCell key={i} path={`${path}[${i}]`} />)
+const CellRow = ({row, path}) => row.map((c, i) => <EditableCell key={i} path={path} index={i} />)
 
 export default compose(
   connect((state, props) => ({

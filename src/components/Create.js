@@ -72,11 +72,11 @@ class CreateSurvey extends React.Component {
           const tablePath = `${path}.tables[${i}]`
           switch (t.type) {
             case 'header':
-              return <CreateHeader key={`table_${i}`} path={tablePath} />
+              return <CreateHeader key={`table_${i}`} path={tablePath} index={i} />
             case 'standard':
-              return <CreateStandard key={`table_${i}`} path={tablePath} />
+              return <CreateStandard key={`table_${i}`} path={tablePath} index={i} />
             case 'rectangular':
-              return <CreateRectangular key={`table_${i}`} path={tablePath} />
+              return <CreateRectangular key={`table_${i}`} path={tablePath} index={i} />
             default:
               return null
           }

@@ -21,14 +21,14 @@ const CreateHeader = ({path, data, activeCell, addRow, classes}) => (
       <TableBody>
         {data.map((_, i) => (
           <TableRow key={i}>
-            <EditableCell key={`edit_${i}`} path={`${path}.side[${i}]`} />
+            <EditableCell key={`edit_${i}`} path={`${path}.side`} index={i} showDelete />
           </TableRow>
         ))}
       </TableBody>
+      <IconButton onClick={addRow}>
+        <AddIcon />
+      </IconButton>
     </Table>
-    <IconButton onClick={addRow}>
-      <AddIcon />
-    </IconButton>
   </Fragment>
 )
 

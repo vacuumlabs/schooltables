@@ -4,7 +4,7 @@ import {compose} from 'redux'
 import {connect} from 'react-redux'
 import {withStyles} from '@material-ui/core/styles'
 import {withHandlers} from 'recompose'
-import {addColumnOnPath, addRowOnPathCreate} from '../actions'
+import {addColumnOnPath, removeIndexOnPath} from '../actions'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
@@ -12,23 +12,32 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import IconButton from '@material-ui/core/IconButton'
 import AddIcon from '@material-ui/icons/Add'
-import CellRow from './CellRow'
+import EditableCell from './EditableCell'
+import DeleteIcon from '@material-ui/icons/Delete'
+import Tooltip from '@material-ui/core/Tooltip'
 
 const styles = (theme) => ({})
 
-const CreateStandard = ({path, data, classes, addColumn}) => (
+const CreateStandard = ({path, header, data, classes, addColumn, deleteTable}) => (
   <Table>
     <TableHead>
       <TableRow>
-        <CellRow path={`${path}.header`} />
+        {header.map((_, i) => (
+          <EditableCell key={`edit_${i}`} path={`${path}.header`} index={i} showDelete />
+        ))}
         <IconButton onClick={addColumn}>
           <AddIcon />
         </IconButton>
       </TableRow>
     </TableHead>
     <TableBody>
-      <TableRow>{data.map((_, i) => <TableCell key={i}>...</TableCell>)}</TableRow>
+      <TableRow>{header.map((_, i) => <TableCell key={i}>...</TableCell>)}</TableRow>
     </TableBody>
+    <Tooltip id="tooltip-icon" title="Delete">
+      <IconButton aria-label="Delete" onClick={deleteTable}>
+        <DeleteIcon />
+      </IconButton>
+    </Tooltip>
   </Table>
 )
 
@@ -36,11 +45,12 @@ export default compose(
   withStyles(styles),
   connect(
     (state, props) => ({
-      data: get(state, `${props.path}.header`),
+      header: get(state, `${props.path}.header`),
     }),
-    {addColumnOnPath}
+    {addColumnOnPath, removeIndexOnPath}
   ),
   withHandlers({
     addColumn: ({path, addColumnOnPath}) => () => addColumnOnPath(path),
+    deleteTable: ({index, removeIndexOnPath}) => () => removeIndexOnPath(index, 'create.tables'),
   })
 )(CreateStandard)
