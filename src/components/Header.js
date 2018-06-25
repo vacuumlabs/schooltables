@@ -17,7 +17,7 @@ const Header = ({path, data, side, activeCell, classes}) => (
       {side.map((val, i) => (
         <TableRow key={i}>
           <TableCell>{val}</TableCell>
-          <EditableCell path={`${path}.data[${i}]`} />
+          <EditableCell path={`${path}.data`} index={i} />
         </TableRow>
       ))}
     </TableBody>

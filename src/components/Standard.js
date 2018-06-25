@@ -11,7 +11,7 @@ import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
 import IconButton from '@material-ui/core/IconButton'
 import AddIcon from '@material-ui/icons/Add'
-import CellRow from './CellRow'
+import EditableCell from './EditableCell'
 import {addRowOnPathSurvey} from '../actions'
 
 const styles = (theme) => ({})
@@ -24,7 +24,9 @@ const Standard = ({path, data, header, addRow, classes}) => (
     <TableBody>
       {data.map((row, i) => (
         <TableRow key={`rowkey_${i}`}>
-          <CellRow path={`${path}.data[${i}]`} />
+          {row.map((c, j) => (
+            <EditableCell key={`edit_${j}`} path={`${path}.data[${i}]`} index={j} />
+          ))}
         </TableRow>
       ))}
     </TableBody>
@@ -44,6 +46,6 @@ export default compose(
     {addRowOnPathSurvey}
   ),
   withHandlers({
-    addRow: ({path, addRowOnPathSurvey}) => () => addRowOnPathSurvey(path),
+    addRow: ({path, addRowOnPathSurvey}) => () => addRowOnPathSurvey(`${path}.data`),
   })
 )(Standard)

@@ -166,7 +166,7 @@ export const addRowOnPathCreate = (path) => ({
 export const addRowOnPathSurvey = (path) => ({
   type: `Add row to table ${path}`,
   path,
-  reducer: (data) => data.concat([...Array(data[0].length)].map((c) => '')),
+  reducer: (data) => data.concat([[...Array(data[0].length)].map((c) => '')]),
 })
 
 export const removeIndexOnPath = (i, path) => ({
@@ -216,7 +216,7 @@ export const submitCreate = (pushHistory) => async (dispatch, getState) => {
         'Content-Type': 'application/json',
         'X-Token': window.localStorage.getItem('token'),
       }),
-      body: JSON.stringify(omit(getState().create, 'data')),
+      body: JSON.stringify(getState().create),
     })
     if (res.ok) {
       const body = await res.json()
@@ -231,10 +231,18 @@ export const submitCreate = (pushHistory) => async (dispatch, getState) => {
 }
 
 export const submitSurvey = (id, pushHistory) => async (dispatch, getState) => {
+  console.log(getState())
+  console.log(id)
+  console.log('---')
   try {
     const res = await fetch(`${process.env.REACT_APP_API_URL || ''}/api/submit/${id}`, {
       method: 'POST',
-      body: getState()[id].data,
+      headers: new Headers({
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'X-Token': window.localStorage.getItem('token'),
+      }),
+      body: JSON.stringify(getState()[id].tables),
     })
     if (res.ok) {
       const body = await res.json()

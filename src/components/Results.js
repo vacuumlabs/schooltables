@@ -1,21 +1,22 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 import {compose} from 'redux'
 import {connect} from 'react-redux'
-import {withRouter, Link} from 'react-router-dom'
+import {branch, withHandlers, withProps} from 'recompose'
+import {withRouter} from 'react-router-dom'
 import {withDataProviders} from 'data-provider'
+import {get} from 'lodash'
+import {submitSurvey, clearStoredData, loadOrClearSurvey} from '../actions'
 import {paramsIdSelector, resultsSelector} from '../selectors'
 import {resultsProvider} from '../dataProviders'
 import {withStyles} from '@material-ui/core/styles'
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import Button from '@material-ui/core/Button'
-import ArrowDownward from '@material-ui/icons/ArrowDownward'
 import Paper from '@material-ui/core/Paper'
+import Button from '@material-ui/core/Button'
+import Delete from '@material-ui/icons/Delete'
+import Check from '@material-ui/icons/Check'
 import Title from './Title'
-import CellRow from './CellRow'
+import Header from './Header'
+import Standard from './Standard'
+import Rectangular from './Rectangular'
 
 const styles = (theme) => ({
   root: {
@@ -32,37 +33,25 @@ const styles = (theme) => ({
   },
 })
 
-// result = {
-//   title: string,
-//   link: string,
-//   downloadCsv: string,
-//   header: [],
-//   data: [[]]
-// }
-
-const Results = ({path, data, classes, link, downloadCsv}) => {
+const Results = ({id, results, classes}) => {
+  const {tables} = results
+  const path = `results[${id}]`
   return (
-    <Paper className={this.props.classes.root}>
+    <Paper className={classes.root}>
       <Title path={path} />
-      {link}
-      <Table className={this.props.classes.table}>
-        <TableHead>
-          <TableRow>
-            <CellRow path={`${path}.header`} editable={false} />
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.map((row, i) => (
-            <TableRow key={i}>{row.map((c, i) => <TableCell key={i}>{c}</TableCell>)}</TableRow>
-          ))}
-        </TableBody>
-        <Link to={downloadCsv}>
-          <Button variant="outlined" className={classes.button}>
-            <ArrowDownward className={classes.leftIcon} />
-            Stiahnut .csv
-          </Button>
-        </Link>
-      </Table>
+      {tables.map((t, i) => {
+        const tablePath = `${path}.tables[${i}]`
+        switch (t.type) {
+          case 'header':
+            return <Header key={`talbe_${i}`} path={tablePath} />
+          case 'standard':
+            return <Standard key={`talbe_${i}`} path={tablePath} />
+          case 'rectangular':
+            return <Rectangular key={`talbe_${i}`} path={tablePath} />
+          default:
+            return null
+        }
+      })}
     </Paper>
   )
 }
@@ -70,8 +59,9 @@ const Results = ({path, data, classes, link, downloadCsv}) => {
 export default compose(
   withStyles(styles),
   withRouter,
+  withProps((props) => ({id: paramsIdSelector(undefined, props)})),
   withDataProviders((props) => {
-    return [resultsProvider(paramsIdSelector(undefined, props))]
+    return [resultsProvider(props.id)]
   }),
   connect((state, props) => ({
     results: resultsSelector(state, props),

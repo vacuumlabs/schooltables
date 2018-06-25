@@ -55,7 +55,8 @@ class Survey extends React.Component {
   render = () => {
     // skip first render
     if (!this.state.loaded) return null
-    const {path, data, classes, submitSurvey, deleteSurvey} = this.props
+    // TODO thank you screen
+    const {path, data, classes, submit, deleteSurvey} = this.props
     const {tables} = data
     return (
       <Paper className={this.props.classes.root}>
@@ -79,7 +80,7 @@ class Survey extends React.Component {
               <Delete className={classes.leftIcon} />
               Zmazat formular
             </Button>
-            <Button variant="outlined" className={classes.button} onClick={submitSurvey}>
+            <Button variant="outlined" className={classes.button} onClick={submit}>
               <Check className={classes.leftIcon} />
               Dokoncit formular
             </Button>
@@ -110,5 +111,6 @@ export default compose(
   ),
   withHandlers({
     deleteSurvey: ({clearStoredData, id}) => () => clearStoredData(id),
+    submit: ({submitSurvey, history, id}) => () => submitSurvey(id, history.push),
   })
 )(Survey)

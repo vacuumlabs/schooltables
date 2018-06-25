@@ -8,11 +8,11 @@ import TableBody from '@material-ui/core/TableBody'
 import TableHead from '@material-ui/core/TableHead'
 import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
-import CellRow from './CellRow'
+import EditableCell from './EditableCell'
 
 const styles = (theme) => ({})
 
-const Rectangular = ({path, header, side, classes}) => (
+const Rectangular = ({path, header, side, classes, data}) => (
   <Table>
     <TableHead>
       <TableRow>
@@ -24,7 +24,9 @@ const Rectangular = ({path, header, side, classes}) => (
       {side.map((c, i) => (
         <TableRow key={`_${i}`}>
           <TableCell key={i}>{c}</TableCell>
-          <CellRow path={`${path}.data[${i}]`} />
+          {data[i].map((_, j) => (
+            <EditableCell key={`edit_${j}`} path={`${path}.data[${i}]`} index={j} />
+          ))}
         </TableRow>
       ))}
     </TableBody>
@@ -36,5 +38,6 @@ export default compose(
   connect((state, props) => ({
     header: get(state, `${props.path}.header`),
     side: get(state, `${props.path}.side`),
+    data: get(state, `${props.path}.data`),
   }))
 )(Rectangular)

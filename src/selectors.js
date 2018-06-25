@@ -10,7 +10,7 @@ export const paramsOrCreateSelector = (_, props) =>
 export const resourcesSelector = (state) => state.resources
 // surveys on root
 export const surveysSelector = (state) => state
-export const allResultsSelector = (state) => state.resources
+export const allResultsSelector = (state) => state.results
 
 export const surveySelector = createSelector(
   paramsOrCreateSelector,
