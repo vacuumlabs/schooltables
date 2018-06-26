@@ -21,7 +21,7 @@ const CreateHeader = ({path, data, activeCell, addRow, classes}) => (
       <TableBody>
         {data.map((_, i) => (
           <TableRow key={i}>
-            <EditableCell key={`edit_${i}`} path={`${path}.side`} index={i} showDelete />
+            <EditableCell key={`edit_${i}`} path={`${path}.side`} index={i} showDelete editable />
           </TableRow>
         ))}
       </TableBody>

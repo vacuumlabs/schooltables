@@ -41,9 +41,9 @@ const SurveyList = ({data, classes}) => {
         <TableBody>
           {Object.values(data).map((row, i) => (
             <TableRow key={i}>
-              <TableCell>{row.date}</TableCell>
+              <TableCell>{row.created_at}</TableCell>
               <TableCell>
-                <Link to={`/results/${row.id}`}>{row.title}</Link>
+                <Link to={`/results/${row.id}`}>{row.data.title}</Link>
               </TableCell>
             </TableRow>
           ))}

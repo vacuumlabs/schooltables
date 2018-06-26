@@ -1,4 +1,5 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
 import {withStyles} from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
@@ -26,28 +27,32 @@ const styles = {
 
 const Admin = ({classes}) => (
   <div>
-    <Card className={classes.card}>
-      <CardContent>
-        <Typography variant="headline" component="h2">
-          Vytvorit novu
-        </Typography>
-        <Typography component="p">Lorem ipsum</Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small">Vyvorit</Button>
-      </CardActions>
-    </Card>
-    <Card className={classes.card}>
-      <CardContent>
-        <Typography variant="headline" component="h2">
-          Zoznam
-        </Typography>
-        <Typography component="p">Lorem ipsum</Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small">Zoznam</Button>
-      </CardActions>
-    </Card>
+    <Link to="/create">
+      <Card className={classes.card}>
+        <CardContent>
+          <Typography variant="headline" component="h2">
+            Vytvorit novu
+          </Typography>
+          <Typography component="p">Lorem ipsum</Typography>
+        </CardContent>
+        <CardActions>
+          <Button size="small">Vyvorit</Button>
+        </CardActions>
+      </Card>
+    </Link>
+    <Link to="/surveys">
+      <Card className={classes.card}>
+        <CardContent>
+          <Typography variant="headline" component="h2">
+            Zoznam
+          </Typography>
+          <Typography component="p">Lorem ipsum</Typography>
+        </CardContent>
+        <CardActions>
+          <Button size="small">Zoznam</Button>
+        </CardActions>
+      </Card>
+    </Link>
   </div>
 )
 

@@ -30,7 +30,7 @@ router.post('/submit/:id', async (req, res, next) => {
     })
     .returning('id')
   console.log('all good ?')
-  res.json({id: test[0]})
+  res.sendStatus(200)
 })
 
 module.exports = router

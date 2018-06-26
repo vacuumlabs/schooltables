@@ -7,19 +7,13 @@ import {get} from 'lodash'
 import {withHandlers, withProps} from 'recompose'
 import {updateValue, setActiveCell} from '../actions'
 
-const Title = ({value, active, editable, onChange, setActive}) => (
-  <Typography variant="display3" gutterBottom onClick={editable ? setActive : null}>
-    {active ? (
-      <TextField
-        label={'Zadajte nazov'}
-        value={value == null ? '' : value}
-        margin="normal"
-        onChange={onChange}
-      />
-    ) : (
-      value
-    )}
-  </Typography>
+const Title = ({value, onChange}) => (
+  <TextField
+    label={'Zadajte nazov'}
+    value={value == null ? '' : value}
+    margin="normal"
+    onChange={onChange}
+  />
 )
 
 export default compose(
@@ -27,11 +21,10 @@ export default compose(
     (state, props) => ({
       stateValue: get(state, `${props.path}.title`),
     }),
-    {updateValue, setActiveCell}
+    {updateValue}
   ),
   withProps(({stateValue}) => ({value: stateValue == null ? '' : stateValue})),
   withHandlers({
-    onChange: ({path, updateValue}) => (e) => updateValue(path, e.target.value),
-    setActive: ({path, setActiveCell}) => (e) => setActiveCell(path),
+    onChange: ({path, updateValue}) => (e) => updateValue(`${path}.title`, e.target.value),
   })
 )(Title)

@@ -57,6 +57,7 @@ export const clearStoredData = (path) => ({
     })
     return {
       ...survey,
+      done: false,
       tables,
     }
   },
@@ -231,9 +232,6 @@ export const submitCreate = (pushHistory) => async (dispatch, getState) => {
 }
 
 export const submitSurvey = (id, pushHistory) => async (dispatch, getState) => {
-  console.log(getState())
-  console.log(id)
-  console.log('---')
   try {
     const res = await fetch(`${process.env.REACT_APP_API_URL || ''}/api/submit/${id}`, {
       method: 'POST',
@@ -245,14 +243,15 @@ export const submitSurvey = (id, pushHistory) => async (dispatch, getState) => {
       body: JSON.stringify(getState()[id].tables),
     })
     if (res.ok) {
-      const body = await res.json()
-      // TODO thankyou page
-      pushHistory(`/thankyou/${body.id}`)
+      console.log('here?')
+      dispatch(updateValue([id, 'done'], true))
     } else {
+      console.log('orhere?')
       console.log(res.status)
       console.log(res.statusText)
     }
   } catch (e) {
+    console.log('or catch')
     console.log(e)
   }
 }

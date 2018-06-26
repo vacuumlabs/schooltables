@@ -24,7 +24,7 @@ const CreateRectangular = ({path, header, side, classes, addColumn, addRow, dele
       <TableRow>
         <TableCell />
         {header.map((_, i) => (
-          <EditableCell key={`edit_${i}`} path={`${path}.header`} index={i} showDelete />
+          <EditableCell key={`edit_${i}`} path={`${path}.header`} index={i} showDelete editable />
         ))}
         <IconButton onClick={addColumn}>
           <AddIcon />
@@ -34,7 +34,7 @@ const CreateRectangular = ({path, header, side, classes, addColumn, addRow, dele
     <TableBody>
       {side.map((_, i) => (
         <TableRow key={`row_${i}`}>
-          <EditableCell key={`cell_${i}`} path={`${path}.side`} index={i} showDelete />
+          <EditableCell key={`cell_${i}`} path={`${path}.side`} index={i} showDelete editable />
           {header.map((_, i) => <TableCell key={`other_cell_${i}`}>...</TableCell>)}
         </TableRow>
       ))}

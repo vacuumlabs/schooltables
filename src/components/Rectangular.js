@@ -12,7 +12,7 @@ import EditableCell from './EditableCell'
 
 const styles = (theme) => ({})
 
-const Rectangular = ({path, header, side, classes, data}) => (
+const Rectangular = ({path, header, side, classes, data, editable}) => (
   <Table>
     <TableHead>
       <TableRow>
@@ -25,7 +25,12 @@ const Rectangular = ({path, header, side, classes, data}) => (
         <TableRow key={`_${i}`}>
           <TableCell key={i}>{c}</TableCell>
           {data[i].map((_, j) => (
-            <EditableCell key={`edit_${j}`} path={`${path}.data[${i}]`} index={j} />
+            <EditableCell
+              key={`edit_${j}`}
+              path={`${path}.data[${i}]`}
+              index={j}
+              editable={editable}
+            />
           ))}
         </TableRow>
       ))}

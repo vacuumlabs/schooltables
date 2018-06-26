@@ -23,7 +23,7 @@ const CreateStandard = ({path, header, data, classes, addColumn, deleteTable}) =
     <TableHead>
       <TableRow>
         {header.map((_, i) => (
-          <EditableCell key={`edit_${i}`} path={`${path}.header`} index={i} showDelete />
+          <EditableCell key={`edit_${i}`} path={`${path}.header`} index={i} showDelete editable />
         ))}
         <IconButton onClick={addColumn}>
           <AddIcon />

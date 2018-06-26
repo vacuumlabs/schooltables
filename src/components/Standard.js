@@ -16,7 +16,7 @@ import {addRowOnPathSurvey} from '../actions'
 
 const styles = (theme) => ({})
 
-const Standard = ({path, data, header, addRow, classes}) => (
+const Standard = ({path, data, header, addRow, classes, editable}) => (
   <Table>
     <TableHead>
       <TableRow>{header.map((c, i) => <TableCell key={i}>{c}</TableCell>)}</TableRow>
@@ -25,14 +25,21 @@ const Standard = ({path, data, header, addRow, classes}) => (
       {data.map((row, i) => (
         <TableRow key={`rowkey_${i}`}>
           {row.map((c, j) => (
-            <EditableCell key={`edit_${j}`} path={`${path}.data[${i}]`} index={j} />
+            <EditableCell
+              key={`edit_${j}`}
+              path={`${path}.data[${i}]`}
+              index={j}
+              editable={editable}
+            />
           ))}
         </TableRow>
       ))}
     </TableBody>
-    <IconButton onClick={addRow}>
-      <AddIcon />
-    </IconButton>
+    {editable && (
+      <IconButton onClick={addRow}>
+        <AddIcon />
+      </IconButton>
+    )}
   </Table>
 )
 

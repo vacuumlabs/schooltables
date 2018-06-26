@@ -10,9 +10,13 @@ import {get} from 'lodash'
 import {withHandlers, withProps} from 'recompose'
 import {updateValue, removeIndexOnPath} from '../actions'
 
-const EditableCell = ({value, onChange, onDelete, children, showDelete}) => (
+const EditableCell = ({value, onChange, onDelete, children, showDelete, editable}) => (
   <TableCell>
-    <TextField value={value == null ? '' : value} margin="normal" onChange={onChange} />
+    {editable ? (
+      <TextField value={value == null ? '' : value} margin="normal" onChange={onChange} />
+    ) : (
+      value
+    )}
     {showDelete && (
       <Tooltip id="tooltip-icon" title="Delete">
         <IconButton aria-label="Delete" onClick={onDelete}>

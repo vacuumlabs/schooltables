@@ -13,7 +13,7 @@ import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
 import Delete from '@material-ui/icons/Delete'
 import Check from '@material-ui/icons/Check'
-import Title from './Title'
+import Typography from '@material-ui/core/Typography'
 import Header from './Header'
 import Standard from './Standard'
 import Rectangular from './Rectangular'
@@ -57,19 +57,32 @@ class Survey extends React.Component {
     if (!this.state.loaded) return null
     // TODO thank you screen
     const {path, data, classes, submit, deleteSurvey} = this.props
-    const {tables} = data
+    const {tables, title, done} = data
+    if (done) {
+      return (
+        <Paper className={this.props.classes.root}>
+          Dakujeme za vyplnenie formularu
+          <Button variant="outlined" className={classes.button} onClick={deleteSurvey}>
+            <Delete className={classes.leftIcon} />
+            Vyplnit novy formular
+          </Button>
+        </Paper>
+      )
+    }
     return (
       <Paper className={this.props.classes.root}>
-        <Title path={path} />
+        <Typography variant="display2" gutterBottom>
+          {title}
+        </Typography>
         {tables.map((t, i) => {
           const tablePath = `${path}.tables[${i}]`
           switch (t.type) {
             case 'header':
-              return <Header key={`talbe_${i}`} path={tablePath} />
+              return <Header key={`talbe_${i}`} path={tablePath} editable />
             case 'standard':
-              return <Standard key={`talbe_${i}`} path={tablePath} />
+              return <Standard key={`talbe_${i}`} path={tablePath} editable />
             case 'rectangular':
-              return <Rectangular key={`talbe_${i}`} path={tablePath} />
+              return <Rectangular key={`talbe_${i}`} path={tablePath} editable />
             default:
               return null
           }

@@ -10,6 +10,7 @@ import {paramsIdSelector, resultsSelector} from '../selectors'
 import {resultsProvider} from '../dataProviders'
 import {withStyles} from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import Delete from '@material-ui/icons/Delete'
 import Check from '@material-ui/icons/Check'
@@ -34,11 +35,13 @@ const styles = (theme) => ({
 })
 
 const Results = ({id, results, classes}) => {
-  const {tables} = results
+  const {tables, title} = results
   const path = `results[${id}]`
   return (
     <Paper className={classes.root}>
-      <Title path={path} />
+      <Typography variant="display2" gutterBottom>
+        {title}
+      </Typography>
       {tables.map((t, i) => {
         const tablePath = `${path}.tables[${i}]`
         switch (t.type) {

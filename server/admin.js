@@ -95,66 +95,6 @@ const getResults = (results, definition) => {
       console.log(tables[i])
     }
   }
-  //   switch (tables[i].type) {
-  //     case 'standard':
-  //       header = header.concat(tables[i].header)
-  //       break
-  //     case 'rectangular':
-  //       rectIds.push(i)
-  //       // rects skipped, data concatenated for the rest
-  //       continue
-  //       break
-  //     default:
-  //       break
-  //   }
-  // }
-
-  // for (let i = 0; i < tables.length; i++) {
-  //   switch (tables[i].type) {
-  //     case 'header':
-  //       header = header.concat(tables[i].side)
-  //       break
-  //     case 'standard':
-  //       header = header.concat(tables[i].header)
-  //       break
-  //     case 'rectangular':
-  //       rectIds.push(i)
-  //       // rects skipped, data concatenated for the rest
-  //       continue
-  //       break
-  //     default:
-  //       console.log('should not happen')
-  //       console.log(tables[i])
-  //       break
-  //   }
-  //   for (let j = 0; j < results.length; j++) {
-  //     data[j] = data[j].concat(results[j].data[i].data)
-  //   }
-  // }
-  // let result = {
-  //   header,
-  //   data,
-  // }
-  // console.log('here?')
-  // if (rectIds.length) {
-  //   const rectHeaders = results.map((r) => _.zip(r.data[0].side, r.data[0].data))
-
-  //   const rects = []
-  //   for (const res of results) {
-  //     const tables = rectIds.map((id) => res.data[id])
-  //     tables.map((t) => {
-  //       const extendedFirstColumn = [''].concat(t.side)
-  //       const otherColumns = [t.header, ...t.data]
-  //       return extendedFirstColumn.map((c, i) => [c, otherColumns[i]])
-  //     })
-  //     rects.push(tables)
-  //   }
-  //   result = {
-  //     ...result,
-  //     rectHeaders,
-  //     rects,
-  //   }
-  // }
   return data
 }
 
@@ -168,11 +108,14 @@ router.get('/results/:id', async (req, res, next) => {
     .first()
   if (!definition) res.sendStatus(404)
   console.log(results, definition)
-  res.json({id: req.params.id, tables: getResults(results, definition)})
+  res.json({
+    id: req.params.id,
+    title: definition.data.title,
+    tables: getResults(results, definition),
+  })
 })
 
 router.get('/csv/:id', async (req, res, next) => {
-  console.log('waaaat?????????????????>>>>>>>>>>')
   const results = await db('results')
     .select('*')
     .where('survey_id', req.params.id)

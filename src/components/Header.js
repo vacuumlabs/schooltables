@@ -11,13 +11,13 @@ import EditableCell from './EditableCell'
 
 const styles = (theme) => ({})
 
-const Header = ({path, data, side, activeCell, classes}) => (
+const Header = ({path, data, side, activeCell, classes, editable}) => (
   <Table className={classes.table}>
     <TableBody>
       {side.map((val, i) => (
         <TableRow key={i}>
           <TableCell>{val}</TableCell>
-          <EditableCell path={`${path}.data`} index={i} />
+          <EditableCell path={`${path}.data`} index={i} editable={editable} />
         </TableRow>
       ))}
     </TableBody>

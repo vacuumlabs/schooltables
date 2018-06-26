@@ -17,7 +17,7 @@ const App = () => (
     <Route path="/surveys" component={SurveyList} />
     <Route path="/survey/:id" component={Survey} />
     <Route path="/results/:id" component={Results} />
-    <Redirect to="/admin" />
+    <Redirect to="/" />
   </Switch>
 )
 
