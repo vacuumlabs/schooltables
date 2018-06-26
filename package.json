@@ -40,7 +40,7 @@
     "dev": "react-scripts start",
     "dev-server": "NODE_ENV=development ADMIN_NAME=admin ADMIN_PASSWORD=admin nodemon server/index.js",
     "start": "NODE_ENV=production node server/index.js",
-    "build": "react-scripts build",
+    "build": "react-scripts build & knex migrate:latest --knexfile ./server/knexfile.js",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "fix": "prettier-eslint --write \"{src,server}/**/*.{js,jsx,json,css}\"",
