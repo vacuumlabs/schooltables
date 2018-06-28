@@ -27,7 +27,6 @@ const styles = (theme) => ({
   },
 })
 
-// TODO check if works
 const SurveyList = ({data, classes}) => {
   return (
     <Paper className={classes.root}>

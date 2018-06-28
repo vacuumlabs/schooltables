@@ -17,14 +17,14 @@ router.use((req, res, next) => {
 })
 
 router.use((req, res, next) => {
-  if (
-    process.env.NODE_ENV !== 'development' &&
-    req.path !== '/login' &&
-    tokens.indexOf(req.header('X-Token')) === -1
-  ) {
+  if (req.path !== '/login' && tokens.indexOf(req.header('X-Token')) === -1) {
     return res.redirect('/login')
   }
   return next()
+})
+
+router.get('/check', (req, res) => {
+  res.sendStatus(200)
 })
 
 router.post('/login', (req, res) => {

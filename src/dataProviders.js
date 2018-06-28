@@ -4,6 +4,22 @@ const dispatchReceivedData = (path, mappingFn, ...mappingFnArgs) => (ref, data, 
   dispatch(receiveData(path, data, ref, mappingFn, ...mappingFnArgs))
 }
 
+const dummy = () => undefined
+
+export const adminCheckProvider = () => ({
+  ref: 'adminCheck',
+  getData: [
+    fetch,
+    `${process.env.REACT_APP_API_URL || ''}/admin/check`,
+    {
+      headers: new Headers({
+        'X-Token': window.localStorage.getItem('token'),
+      }),
+    },
+  ],
+  onData: [dummy],
+})
+
 export const resourceProvider = (id) => ({
   ref: 'resource',
   getData: [

@@ -1,4 +1,7 @@
 import React from 'react'
+import {compose} from 'redux'
+import {withDataProviders} from 'data-provider'
+import {adminCheckProvider} from '../dataProviders'
 import {Link} from 'react-router-dom'
 import {withStyles} from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
@@ -56,4 +59,9 @@ const Admin = ({classes}) => (
   </div>
 )
 
-export default withStyles(styles)(Admin)
+export default compose(
+  withStyles(styles),
+  withDataProviders((props) => {
+    return [adminCheckProvider()]
+  })
+)(Admin)
