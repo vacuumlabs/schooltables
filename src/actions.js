@@ -12,7 +12,7 @@ export const receiveData = (
   type: `Received data from ${dataProviderRef}`,
   path,
   payload: data,
-  reducer: (state, data) => console.log(state) || {...state, ...mappingFn(data, ...mappingFnArgs)},
+  reducer: (state, data) => ({...state, ...mappingFn(data, ...mappingFnArgs)}),
 })
 
 export const updateValue = (path, data) => ({
@@ -181,8 +181,8 @@ export const removeIndexOnPath = (i, path) => ({
 })
 
 export const login = (pushHistory, name, password) => async (dispatch, getState) => {
+  dispatch(updateValue('loginError', ''))
   try {
-    console.log(name, password)
     const res = await fetch(`${process.env.REACT_APP_API_URL || ''}/admin/login`, {
       method: 'POST',
       headers: {
@@ -199,8 +199,7 @@ export const login = (pushHistory, name, password) => async (dispatch, getState)
       window.localStorage.setItem('token', body.token)
       pushHistory('/surveys')
     } else {
-      console.log(res.status)
-      console.log(res.statusText)
+      dispatch(updateValue('loginError', 'Nespravne udaje'))
     }
   } catch (e) {
     console.log(e)

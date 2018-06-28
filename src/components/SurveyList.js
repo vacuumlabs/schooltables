@@ -1,7 +1,7 @@
 import React from 'react'
 import {compose} from 'redux'
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
+import {Link, withRouter} from 'react-router-dom'
 import {withDataProviders} from 'data-provider'
 import {surveyListProvider} from '../dataProviders'
 import {withStyles} from '@material-ui/core/styles'
@@ -53,9 +53,10 @@ const SurveyList = ({data, classes}) => {
 }
 
 export default compose(
+  withRouter,
   withStyles(styles),
   withDataProviders((props) => {
-    return [surveyListProvider()]
+    return [surveyListProvider(props.history.push)]
   }),
   connect((state, props) => ({
     data: state.surveyList,

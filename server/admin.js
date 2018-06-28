@@ -8,17 +8,21 @@ const db = require('./db')
 const tokens = []
 
 router.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*')
-  res.header(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Token, X-Requested-With, Content-Type, Accept'
-  )
-  next()
+  if (req.method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Origin', '*')
+    res.header(
+      'Access-Control-Allow-Headers',
+      'Origin, X-Token, X-Requested-With, Content-Type, Accept'
+    )
+    res.send(200)
+  } else {
+    next()
+  }
 })
 
 router.use((req, res, next) => {
   if (req.path !== '/login' && tokens.indexOf(req.header('X-Token')) === -1) {
-    return res.redirect('/login')
+    return res.sendStatus(401)
   }
   return next()
 })

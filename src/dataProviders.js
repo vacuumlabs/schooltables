@@ -6,7 +6,7 @@ const dispatchReceivedData = (path, mappingFn, ...mappingFnArgs) => (ref, data, 
 
 const dummy = () => undefined
 
-export const adminCheckProvider = () => ({
+export const adminCheckProvider = (pushHistory) => ({
   ref: 'adminCheck',
   getData: [
     fetch,
@@ -18,6 +18,7 @@ export const adminCheckProvider = () => ({
     },
   ],
   onData: [dummy],
+  onAbort: [pushHistory, '/login'],
 })
 
 export const resourceProvider = (id) => ({
@@ -35,7 +36,7 @@ export const resourceProvider = (id) => ({
   onData: [dispatchReceivedData, ['resources']],
 })
 
-export const surveyListProvider = () => ({
+export const surveyListProvider = (pushHistory) => ({
   ref: 'surveyList',
   getData: [
     fetch,
@@ -48,6 +49,7 @@ export const surveyListProvider = () => ({
     },
   ],
   onData: [dispatchReceivedData, ['surveyList']],
+  onAbort: [pushHistory, '/login'],
 })
 
 export const surveyProvider = (id) => ({
@@ -65,7 +67,7 @@ export const surveyProvider = (id) => ({
   onData: [dispatchReceivedData],
 })
 
-export const resultsProvider = (id) => ({
+export const resultsProvider = (id, pushHistory) => ({
   ref: `results-${id}`,
   getData: [
     fetch,
@@ -78,4 +80,5 @@ export const resultsProvider = (id) => ({
     },
   ],
   onData: [dispatchReceivedData, ['results']],
+  onAbort: [pushHistory, '/login'],
 })

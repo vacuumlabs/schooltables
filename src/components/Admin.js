@@ -1,5 +1,6 @@
 import React from 'react'
 import {compose} from 'redux'
+import {withRouter} from 'react-router-dom'
 import {withDataProviders} from 'data-provider'
 import {adminCheckProvider} from '../dataProviders'
 import {Link} from 'react-router-dom'
@@ -61,7 +62,8 @@ const Admin = ({classes}) => (
 
 export default compose(
   withStyles(styles),
+  withRouter,
   withDataProviders((props) => {
-    return [adminCheckProvider()]
+    return [adminCheckProvider(props.history.push)]
   })
 )(Admin)

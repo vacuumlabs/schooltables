@@ -3,7 +3,8 @@ import {compose} from 'redux'
 import {connect} from 'react-redux'
 import {withHandlers} from 'recompose'
 import {withRouter, Link} from 'react-router-dom'
-import {get} from 'lodash'
+import {withDataProviders} from 'data-provider'
+import {adminCheckProvider} from '../dataProviders'
 import {withStyles} from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
@@ -111,6 +112,9 @@ class CreateSurvey extends React.Component {
 export default compose(
   withRouter,
   withStyles(styles),
+  withDataProviders((props) => {
+    return [adminCheckProvider(props.history.push)]
+  }),
   connect(
     (state, props) => ({
       data: state.create,

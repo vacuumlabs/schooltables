@@ -64,7 +64,7 @@ export default compose(
   withRouter,
   withProps((props) => ({id: paramsIdSelector(undefined, props)})),
   withDataProviders((props) => {
-    return [resultsProvider(props.id)]
+    return [resultsProvider(props.id, props.history.push)]
   }),
   connect((state, props) => ({
     results: resultsSelector(state, props),
