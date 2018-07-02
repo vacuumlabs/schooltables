@@ -19,6 +19,7 @@
     "knex": "^0.14.6",
     "lodash": "^4.17.10",
     "morgan": "^1.9.0",
+    "papaparse": "^4.5.0",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "pg": "^7.4.3",

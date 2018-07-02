@@ -8,12 +8,14 @@ import {get} from 'lodash'
 import {submitSurvey, clearStoredData, loadOrClearSurvey} from '../actions'
 import {paramsOrCreateSelector} from '../selectors'
 import {surveyProvider} from '../dataProviders'
+import {downloadCsv} from '../utils'
 import {withStyles} from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
 import Delete from '@material-ui/icons/Delete'
 import Check from '@material-ui/icons/Check'
 import Typography from '@material-ui/core/Typography'
+import DownloadIcon from '@material-ui/icons/CloudDownload'
 import Header from './Header'
 import Standard from './Standard'
 import Rectangular from './Rectangular'
@@ -58,7 +60,7 @@ class Survey extends React.Component {
 
   render = () => {
     if (!this.state.loaded) return null
-    const {path, data, classes, submit, deleteSurvey, preview} = this.props
+    const {path, data, classes, submit, deleteSurvey, preview, saveCsv} = this.props
     const {tables, title, done, note} = data
     if (done) {
       return (
@@ -67,6 +69,15 @@ class Survey extends React.Component {
             <Typography variant="subheading" gutterBottom>
               Dakujeme za vyplnenie formularu
             </Typography>
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              onClick={saveCsv}
+            >
+              Save .csv
+              <DownloadIcon className={classes.rightIcon} />
+            </Button>
             <Button variant="outlined" className={classes.button} onClick={deleteSurvey}>
               <Delete className={classes.leftIcon} />
               Vyplnit novy formular
@@ -148,5 +159,8 @@ export default compose(
   withHandlers({
     deleteSurvey: ({clearStoredData, id}) => () => clearStoredData(id),
     submit: ({submitSurvey, history, id}) => () => submitSurvey(id, history.push),
-  })
+  }),
+  withProps(({data}) => ({
+    saveCsv: () => downloadCsv(data.tables, `${data.title}.csv`),
+  }))
 )(Survey)

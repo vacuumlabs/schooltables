@@ -1,5 +1,6 @@
 import {set} from 'lodash'
 import produce from 'immer'
+import {unparse} from 'papaparse'
 
 export const immutableSet = (obj, path, value) =>
   path && path.length
@@ -46,4 +47,45 @@ export const createEmptyRectangularData = (columns, rows = 1) => {
   console.log(columns)
   console.log(result)
   return result
+}
+
+// https://github.com/mholt/PapaParse
+export const unparseTables = (tables) =>
+  tables.map((t) => {
+    let {header, data} = t
+    if (t.side) {
+      header = header && [' ', ...header]
+      data = data.map((row, i) => (Array.isArray(row) ? [t.side[i], ...row] : [t.side[i], row]))
+    }
+    return unparse({
+      fields: header,
+      data,
+    })
+  })
+
+// Function to download data to a file
+//https://stackoverflow.com/questions/13405129/javascript-create-and-save-file
+export function download(data, filename, type) {
+  console.log('wat?')
+  const file = new Blob([data], {type})
+  if (window.navigator.msSaveOrOpenBlob) {
+    // IE10+
+    window.navigator.msSaveOrOpenBlob(file, filename)
+  } else {
+    // Others
+    let a = document.createElement('a'),
+      url = URL.createObjectURL(file)
+    a.href = url
+    a.download = filename
+    document.body.appendChild(a)
+    a.click()
+    setTimeout(() => {
+      document.body.removeChild(a)
+      window.URL.revokeObjectURL(url)
+    }, 0)
+  }
+}
+
+export const downloadCsv = (tables, title) => {
+  download(unparseTables(tables).join('\r\n'), title, 'csv')
 }

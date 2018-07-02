@@ -8,12 +8,15 @@ import {get} from 'lodash'
 import {submitSurvey, clearStoredData, loadOrClearSurvey} from '../actions'
 import {paramsIdSelector, resultsSelector} from '../selectors'
 import {resultsProvider} from '../dataProviders'
+import {downloadCsv} from '../utils'
 import {withStyles} from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import Delete from '@material-ui/icons/Delete'
 import Check from '@material-ui/icons/Check'
+import Icon from '@material-ui/core/Icon'
+import DownloadIcon from '@material-ui/icons/CloudDownload'
 import Title from './Title'
 import Header from './Header'
 import Standard from './Standard'
@@ -28,26 +31,33 @@ const styles = (theme) => ({
     overflowX: 'auto',
     padding: 20,
     paddingTop: theme.spacing.unit * 2,
+    marginBottom: 20,
   },
   button: {
-    margin: 10,
+    margin: theme.spacing.unit,
   },
   link: {
     display: 'block',
+    marginBottom: 20,
   },
 })
 
-const Results = ({id, results, classes}) => {
+const Results = ({id, results, classes, saveCsv}) => {
   const {tables, title, note} = results
   const path = `results[${id}]`
   return (
     <div className={classes.root}>
+      <Link to="/surveys">
+        <Paper className={classes.paper}>
+          <Typography>Návrat na zoznam dotazníkov.</Typography>
+        </Paper>
+      </Link>
       <Paper className={classes.paper}>
         <Typography variant="display2" gutterBottom>
           {title}
         </Typography>
         <Typography gutterBottom>Odkaz na dotazník: </Typography>
-        <a href={`${window.location.origin}/survey/${id}`}>
+        <a href={`${window.location.origin}/survey/${id}`} className={classes.link}>
           <Typography variant="button" gutterBottom>
             {`${window.location.origin}/survey/${id}`}
           </Typography>
@@ -66,6 +76,10 @@ const Results = ({id, results, classes}) => {
               return null
           }
         })}
+        <Button variant="contained" color="primary" className={classes.button} onClick={saveCsv}>
+          Save .csv
+          <DownloadIcon className={classes.rightIcon} />
+        </Button>
       </Paper>
     </div>
   )
@@ -80,5 +94,8 @@ export default compose(
   }),
   connect((state, props) => ({
     results: resultsSelector(state, props),
+  })),
+  withProps(({results}) => ({
+    saveCsv: () => downloadCsv(results.tables, `${results.title}.csv`),
   }))
 )(Results)
