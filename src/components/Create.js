@@ -6,6 +6,7 @@ import {withRouter, Link} from 'react-router-dom'
 import {withDataProviders} from 'data-provider'
 import {adminCheckProvider} from '../dataProviders'
 import {withStyles} from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
 import ViewQuilt from '@material-ui/icons/ViewQuilt'
@@ -20,6 +21,7 @@ import {
   submitCreate,
 } from '../actions'
 import Title from './Title'
+import Note from './Note'
 import CreateHeader from './CreateHeader'
 import CreateStandard from './CreateStandard'
 import CreateRectangular from './CreateRectangular'
@@ -27,11 +29,11 @@ import CreateRectangular from './CreateRectangular'
 const styles = (theme) => ({
   root: {
     width: '100%',
-    marginTop: theme.spacing.unit * 3,
-    overflowX: 'auto',
+    padding: 50,
   },
-  table: {
-    minWidth: 700,
+  paper: {
+    padding: 20,
+    paddingTop: theme.spacing.unit * 2,
   },
   iconButton: {
     position: 'absolute',
@@ -48,16 +50,17 @@ const styles = (theme) => ({
 class CreateSurvey extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {activeId: undefined}
+    this.state = {mounted: false}
   }
 
   componentDidMount = () => {
-    //this.props.loadOrClearSurvey('create')
+    this.props.loadOrClearSurvey('create')
+    this.setState({mounted: true})
   }
 
-  static getDerivedStateFromProps = (props) => {
-    if (props.data) {
-      window.localStorage.setItem('create', JSON.stringify(props.data))
+  componentDidUpdate = () => {
+    if (this.state.mounted) {
+      window.localStorage.setItem('create', JSON.stringify(this.props.data))
     }
     return null
   }
@@ -67,44 +70,57 @@ class CreateSurvey extends React.Component {
     const {data, classes, deleteForm, submitForm, addRectangular, addStandard} = this.props
     const {tables} = data
     return (
-      <Paper className={classes.root}>
-        <Title path={path} />
-        {tables.map((t, i) => {
-          const tablePath = `${path}.tables[${i}]`
-          switch (t.type) {
-            case 'header':
-              return <CreateHeader key={`table_${i}`} path={tablePath} index={i} />
-            case 'standard':
-              return <CreateStandard key={`table_${i}`} path={tablePath} index={i} />
-            case 'rectangular':
-              return <CreateRectangular key={`table_${i}`} path={tablePath} index={i} />
-            default:
-              return null
-          }
-        })}
-        <Button variant="outlined" className={classes.button} onClick={addRectangular}>
-          <ViewQuilt className={classes.leftIcon} />
-          2D tabulka
-        </Button>
-        <Button variant="outlined" className={classes.button} onClick={addStandard}>
-          <ViewStream className={classes.leftIcon} />
-          Standard tabulka
-        </Button>
-        <Link to="/preview">
-          <Button variant="outlined" className={classes.button}>
-            <Check className={classes.leftIcon} />
-            Preview
-          </Button>
-        </Link>
-        <Button variant="outlined" className={classes.button} onClick={deleteForm}>
-          <Delete className={classes.leftIcon} />
-          Zmazat formular
-        </Button>
-        <Button variant="outlined" className={classes.button} onClick={submitForm}>
-          <Check className={classes.leftIcon} />
-          Dokoncit formular
-        </Button>
-      </Paper>
+      <div className={classes.root}>
+        <Paper className={classes.paper}>
+          <Title path={path} xxLarge />
+          <Note path={path} />
+          {tables.map((t, i) => {
+            const tablePath = `${path}.tables[${i}]`
+            switch (t.type) {
+              case 'header':
+                return <CreateHeader key={`table_${i}`} path={tablePath} index={i} />
+              case 'standard':
+                return <CreateStandard key={`table_${i}`} path={tablePath} index={i} />
+              case 'rectangular':
+                return <CreateRectangular key={`table_${i}`} path={tablePath} index={i} />
+              default:
+                return null
+            }
+          })}
+          <div>
+            <Typography variant="subheading" gutterBottom>
+              Pridat
+            </Typography>
+            <Button variant="outlined" className={classes.button} onClick={addRectangular}>
+              <ViewQuilt className={classes.leftIcon} />
+              2D tabulka
+            </Button>
+            <Button variant="outlined" className={classes.button} onClick={addStandard}>
+              <ViewStream className={classes.leftIcon} />
+              Standard tabulka
+            </Button>
+          </div>
+          <div>
+            <Typography variant="subheading" gutterBottom>
+              Dokoncit
+            </Typography>
+            <Link to="/preview">
+              <Button variant="outlined" className={classes.button}>
+                <Check className={classes.leftIcon} />
+                Nahlad
+              </Button>
+            </Link>
+            <Button variant="outlined" className={classes.button} onClick={deleteForm}>
+              <Delete className={classes.leftIcon} />
+              Zmazat formular
+            </Button>
+            <Button variant="outlined" className={classes.button} onClick={submitForm}>
+              <Check className={classes.leftIcon} />
+              Dokoncit formular
+            </Button>
+          </div>
+        </Paper>
+      </div>
     )
   }
 }

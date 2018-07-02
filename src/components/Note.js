@@ -10,18 +10,20 @@ import {updateValue} from '../actions'
 const styles = (theme) => ({
   field: {
     display: 'block',
-    marginBottom: '0.5rem',
+    margin: '1rem 0',
   },
 })
 
-const Title = ({value, onChange, xLarge, xxLarge, classes}) => (
+const Note = ({value, onChange, classes}) => (
   <TextField
-    label={'Zadajte nazov'}
+    label={'Poznámky'}
     value={value == null ? '' : value}
     margin="normal"
-    onChange={onChange}
+    multiline
+    rows="2"
+    fullWidth
     className={classes.field}
-    inputProps={{style: xLarge ? {fontSize: 'x-large'} : xxLarge ? {fontSize: 'x-large'} : {}}}
+    onChange={onChange}
   />
 )
 
@@ -29,12 +31,12 @@ export default compose(
   withStyles(styles),
   connect(
     (state, props) => ({
-      stateValue: get(state, `${props.path}.title`),
+      stateValue: get(state, `${props.path}.note`),
     }),
     {updateValue}
   ),
   withProps(({stateValue}) => ({value: stateValue == null ? '' : stateValue})),
   withHandlers({
-    onChange: ({path, updateValue}) => (e) => updateValue(`${path}.title`, e.target.value),
+    onChange: ({path, updateValue}) => (e) => updateValue(`${path}.note`, e.target.value),
   })
-)(Title)
+)(Note)

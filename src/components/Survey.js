@@ -2,7 +2,7 @@ import React, {Fragment} from 'react'
 import {compose} from 'redux'
 import {connect} from 'react-redux'
 import {branch, withHandlers, withProps} from 'recompose'
-import {withRouter} from 'react-router-dom'
+import {withRouter, Link} from 'react-router-dom'
 import {withDataProviders} from 'data-provider'
 import {get} from 'lodash'
 import {submitSurvey, clearStoredData, loadOrClearSurvey} from '../actions'
@@ -21,15 +21,16 @@ import Rectangular from './Rectangular'
 const styles = (theme) => ({
   root: {
     width: '100%',
-    marginTop: theme.spacing.unit * 3,
-    overflowX: 'auto',
+    padding: 50,
   },
-  table: {
-    minWidth: 700,
+  paper: {
+    display: 'block',
+    marginBottom: 20,
+    padding: 20,
+    paddingTop: theme.spacing.unit * 2,
   },
-  iconButton: {
-    position: 'absolute',
-    right: '-20px',
+  button: {
+    margin: 10,
   },
 })
 
@@ -44,62 +45,83 @@ class Survey extends React.Component {
     this.setState({loaded: true})
   }
 
-  static getDerivedStateFromProps = (props) => {
-    const id = paramsOrCreateSelector(undefined, props)
-    if (id !== 'create' && props.data) {
-      window.localStorage.setItem(id, JSON.stringify(props.data))
+  componentDidUpdate = () => {
+    const id = paramsOrCreateSelector(undefined, this.props)
+    if (id !== 'create' && this.state.loaded) {
+      console.log('passed create')
+      console.log(this.props.data)
+      console.log(JSON.stringify(this.props.data))
+      window.localStorage.setItem(id, JSON.stringify(this.props.data))
     }
     return null
   }
 
   render = () => {
-    // skip first render
     if (!this.state.loaded) return null
-    // TODO thank you screen
-    const {path, data, classes, submit, deleteSurvey} = this.props
-    const {tables, title, done} = data
+    const {path, data, classes, submit, deleteSurvey, preview} = this.props
+    const {tables, title, done, note} = data
     if (done) {
       return (
-        <Paper className={this.props.classes.root}>
-          Dakujeme za vyplnenie formularu
-          <Button variant="outlined" className={classes.button} onClick={deleteSurvey}>
-            <Delete className={classes.leftIcon} />
-            Vyplnit novy formular
-          </Button>
-        </Paper>
+        <div className={classes.root}>
+          <Paper className={classes.paper}>
+            <Typography variant="subheading" gutterBottom>
+              Dakujeme za vyplnenie formularu
+            </Typography>
+            <Button variant="outlined" className={classes.button} onClick={deleteSurvey}>
+              <Delete className={classes.leftIcon} />
+              Vyplnit novy formular
+            </Button>
+          </Paper>
+        </div>
       )
     }
     return (
-      <Paper className={this.props.classes.root}>
-        <Typography variant="display2" gutterBottom>
-          {title}
-        </Typography>
-        {tables.map((t, i) => {
-          const tablePath = `${path}.tables[${i}]`
-          switch (t.type) {
-            case 'header':
-              return <Header key={`talbe_${i}`} path={tablePath} editable />
-            case 'standard':
-              return <Standard key={`talbe_${i}`} path={tablePath} editable />
-            case 'rectangular':
-              return <Rectangular key={`talbe_${i}`} path={tablePath} editable />
-            default:
-              return null
-          }
-        })}
-        {paramsOrCreateSelector(undefined, this.props) !== 'create' && (
-          <Fragment>
-            <Button variant="outlined" className={classes.button} onClick={deleteSurvey}>
-              <Delete className={classes.leftIcon} />
-              Zmazat formular
-            </Button>
-            <Button variant="outlined" className={classes.button} onClick={submit}>
-              <Check className={classes.leftIcon} />
-              Dokoncit formular
-            </Button>
-          </Fragment>
+      <div className={classes.root}>
+        {preview && (
+          <Link to="/create">
+            <Paper className={classes.paper}>
+              <Typography gutterBottom>Náhľad práve vytváranej tabulky.</Typography>
+              <Typography variant="button" gutterBottom>
+                Kliknutím sa vrátite na pôvodnú obrazovku.
+              </Typography>
+            </Paper>
+          </Link>
         )}
-      </Paper>
+        <Paper className={classes.paper}>
+          <Typography variant="display2" gutterBottom>
+            {title}
+          </Typography>
+          <Typography gutterBottom>{note}</Typography>
+          {tables.map((t, i) => {
+            const tablePath = `${path}.tables[${i}]`
+            switch (t.type) {
+              case 'header':
+                return <Header key={`talbe_${i}`} path={tablePath} editable />
+              case 'standard':
+                return <Standard key={`talbe_${i}`} path={tablePath} editable />
+              case 'rectangular':
+                return <Rectangular key={`talbe_${i}`} path={tablePath} editable />
+              default:
+                return null
+            }
+          })}
+          {paramsOrCreateSelector(undefined, this.props) !== 'create' && (
+            <div className={classes.button}>
+              <Typography variant="subheading" gutterBottom>
+                Dokoncit
+              </Typography>
+              <Button variant="outlined" className={classes.button} onClick={deleteSurvey}>
+                <Delete className={classes.leftIcon} />
+                Zmazat formular
+              </Button>
+              <Button variant="outlined" className={classes.button} onClick={submit}>
+                <Check className={classes.leftIcon} />
+                Dokoncit formular
+              </Button>
+            </div>
+          )}
+        </Paper>
+      </div>
     )
   }
 }
@@ -119,6 +141,7 @@ export default compose(
     (state, props) => ({
       data: get(state, props.id),
       path: props.id,
+      preview: props.id === 'create',
     }),
     {submitSurvey, clearStoredData, loadOrClearSurvey}
   ),

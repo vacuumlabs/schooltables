@@ -4,7 +4,9 @@ const dispatchReceivedData = (path, mappingFn, ...mappingFnArgs) => (ref, data, 
   dispatch(receiveData(path, data, ref, mappingFn, ...mappingFnArgs))
 }
 
-const dummy = () => () => undefined
+const returnedByDummy = () => undefined
+
+const dummy = () => returnedByDummy
 
 export const adminCheckProvider = (pushHistory) => ({
   ref: 'adminCheck',

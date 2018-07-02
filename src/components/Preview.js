@@ -18,15 +18,9 @@ const styles = (theme) => ({
   },
 })
 
-const Preview = ({classes, root}) => (
-  <div>
-    <Paper className={classes.root}>Blah balh blah</Paper>
-    <Survey />
-  </div>
-)
+const Preview = () => <Survey />
 
 export default compose(
-  withStyles(styles),
   withRouter,
   withDataProviders((props) => {
     return [adminCheckProvider(props.history.push)]

@@ -3,9 +3,7 @@ import {createSelector} from 'reselect'
 export const paramsIdSelector = (_, props) => props.match.params.id || '0'
 
 export const paramsOrCreateSelector = (_, props) =>
-  console.log(props.match.path) || props.match.path.indexOf('preview') !== -1
-    ? 'create'
-    : props.match.params.id
+  props.match.path.indexOf('preview') !== -1 ? 'create' : props.match.params.id
 
 export const resourcesSelector = (state) => state.resources
 // surveys on root

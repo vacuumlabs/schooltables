@@ -14,14 +14,10 @@ router.get('/survey/:id', async (req, res, next) => {
     .select('*')
     .where('id', req.params.id)
     .first()
-  const resultData = _.omit(dbData, 'data')
-  console.log(dbData.data.tables)
-  res.json({...resultData, ...dbData.data})
+  res.json({id: dbData.id, created_at: dbData.created_at, ...dbData.data})
 })
 
 router.post('/submit/:id', async (req, res, next) => {
-  console.log('write result')
-  console.log(req.body)
   const test = await db('results')
     .insert({
       created_at: new Date().toISOString(),
@@ -29,7 +25,6 @@ router.post('/submit/:id', async (req, res, next) => {
       data: JSON.stringify(req.body),
     })
     .returning('id')
-  console.log('all good ?')
   res.sendStatus(200)
 })
 

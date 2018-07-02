@@ -4,6 +4,7 @@ import {compose} from 'redux'
 import {connect} from 'react-redux'
 import {withHandlers} from 'recompose'
 import {withStyles} from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
@@ -12,12 +13,19 @@ import IconButton from '@material-ui/core/IconButton'
 import AddIcon from '@material-ui/icons/Add'
 import EditableCell from './EditableCell'
 import {addRowOnPathCreate} from '../actions'
+import {tableContainer, surveyTable} from '../styles'
 
-const styles = (theme) => ({})
+const styles = (theme) => ({
+  tableContainer,
+  surveyTable,
+})
 
 const CreateHeader = ({path, data, activeCell, addRow, classes}) => (
-  <Fragment>
-    <Table>
+  <div className={classes.tableContainer}>
+    <Typography variant="title" gutterBottom>
+      Hlavicka
+    </Typography>
+    <Table className={classes.surveyTable}>
       <TableBody>
         {data.map((_, i) => (
           <TableRow key={i}>
@@ -29,7 +37,7 @@ const CreateHeader = ({path, data, activeCell, addRow, classes}) => (
         <AddIcon />
       </IconButton>
     </Table>
-  </Fragment>
+  </div>
 )
 
 export default compose(

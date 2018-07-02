@@ -22,15 +22,15 @@ import Rectangular from './Rectangular'
 const styles = (theme) => ({
   root: {
     width: '100%',
-    marginTop: theme.spacing.unit * 3,
+    padding: 50,
+  },
+  paper: {
     overflowX: 'auto',
+    padding: 20,
+    paddingTop: theme.spacing.unit * 2,
   },
-  table: {
-    minWidth: 700,
-  },
-  iconButton: {
-    position: 'absolute',
-    right: '-20px',
+  button: {
+    margin: 10,
   },
 })
 
@@ -38,24 +38,26 @@ const Results = ({id, results, classes}) => {
   const {tables, title} = results
   const path = `results[${id}]`
   return (
-    <Paper className={classes.root}>
-      <Typography variant="display2" gutterBottom>
-        {title}
-      </Typography>
-      {tables.map((t, i) => {
-        const tablePath = `${path}.tables[${i}]`
-        switch (t.type) {
-          case 'header':
-            return <Header key={`talbe_${i}`} path={tablePath} />
-          case 'standard':
-            return <Standard key={`talbe_${i}`} path={tablePath} />
-          case 'rectangular':
-            return <Rectangular key={`talbe_${i}`} path={tablePath} />
-          default:
-            return null
-        }
-      })}
-    </Paper>
+    <div className={classes.root}>
+      <Paper className={classes.paper}>
+        <Typography variant="display2" gutterBottom>
+          {title}
+        </Typography>
+        {tables.map((t, i) => {
+          const tablePath = `${path}.tables[${i}]`
+          switch (t.type) {
+            case 'header':
+              return <Header key={`talbe_${i}`} path={tablePath} />
+            case 'standard':
+              return <Standard key={`talbe_${i}`} path={tablePath} />
+            case 'rectangular':
+              return <Rectangular key={`talbe_${i}`} path={tablePath} />
+            default:
+              return null
+          }
+        })}
+      </Paper>
+    </div>
   )
 }
 

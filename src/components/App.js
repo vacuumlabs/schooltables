@@ -5,7 +5,6 @@ import Admin from './Admin'
 import Results from './Results'
 import Survey from './Survey'
 import SurveyList from './SurveyList'
-import Preview from './Preview'
 import Create from './Create'
 
 const App = () => (
@@ -13,7 +12,7 @@ const App = () => (
     <Route path="/" exact component={Admin} />
     <Route path="/login" exact component={Login} />
     <Route path="/create" component={Create} />
-    <Route path="/preview" component={Preview} />
+    <Route path="/preview" component={Survey} />
     <Route path="/surveys" component={SurveyList} />
     <Route path="/survey/:id" component={Survey} />
     <Route path="/results/:id" component={Results} />

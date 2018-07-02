@@ -68,8 +68,10 @@ export const loadOrClearSurvey = (path) => ({
   path,
   reducer: (survey) => {
     const saved = window.localStorage.getItem(path)
+    const surveyToUse = saved ? JSON.parse(saved) : survey
+    // always clear 'create' survey
     if (path !== 'create' && saved) return JSON.parse(saved)
-    const tables = survey.tables.map((table) => {
+    const tables = surveyToUse.tables.map((table) => {
       switch (table.type) {
         case 'header':
           return {
@@ -90,8 +92,11 @@ export const loadOrClearSurvey = (path) => ({
           return table
       }
     })
+    console.log('----')
+    console.log(JSON.parse(saved))
+    console.log(surveyToUse)
     return {
-      ...survey,
+      ...surveyToUse,
       tables,
     }
   },
@@ -207,7 +212,11 @@ export const login = (pushHistory, name, password) => async (dispatch, getState)
 }
 
 export const submitCreate = (pushHistory) => async (dispatch, getState) => {
+  console.log('create start')
+  console.log(getState().create)
   dispatch(clearSurveyData('create'))
+  console.log('after clear')
+  console.log(getState().create)
   try {
     const res = await fetch(`${process.env.REACT_APP_API_URL || ''}/admin/create`, {
       method: 'POST',

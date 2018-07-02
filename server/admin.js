@@ -73,7 +73,7 @@ const getResults = (results, definition) => {
       {
         type: 'standard',
         header: tables[0].side,
-        data: results.map((r) => r.data),
+        data: results.map((r) => r.data[0].data),
       },
     ]
   }
@@ -115,6 +115,7 @@ router.get('/results/:id', async (req, res, next) => {
   res.json({
     id: req.params.id,
     title: definition.data.title,
+    note: definition.data.note,
     tables: getResults(results, definition),
   })
 })

@@ -35,6 +35,9 @@ export const validateRectangularData = (data, numColumns, numRows) => {
 }
 
 export const createEmptyRectangularData = (columns, rows = 1) => {
+  console.log('create mepty')
+  console.log(columns)
+  console.log(rows)
   const result = []
   for (let i = 0; i < rows; i++) {
     result.push([...Array(columns)].map((c) => ''))

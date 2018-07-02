@@ -4,6 +4,7 @@ import {compose} from 'redux'
 import {connect} from 'react-redux'
 import {withHandlers} from 'recompose'
 import {addColumnOnPath, addRowOnPathCreate, removeIndexOnPath} from '../actions'
+import {tableContainer, surveyTable} from '../styles'
 import {withStyles} from '@material-ui/core/styles'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -13,41 +14,48 @@ import TableRow from '@material-ui/core/TableRow'
 import IconButton from '@material-ui/core/IconButton'
 import AddIcon from '@material-ui/icons/Add'
 import EditableCell from './EditableCell'
+import Title from './Title'
 import DeleteIcon from '@material-ui/icons/Delete'
 import Tooltip from '@material-ui/core/Tooltip'
 
-const styles = (theme) => ({})
+const styles = (theme) => ({
+  tableContainer,
+  surveyTable,
+})
 
 const CreateRectangular = ({path, header, side, classes, addColumn, addRow, deleteTable}) => (
-  <Table>
-    <TableHead>
-      <TableRow>
-        <TableCell />
-        {header.map((_, i) => (
-          <EditableCell key={`edit_${i}`} path={`${path}.header`} index={i} showDelete editable />
-        ))}
-        <IconButton onClick={addColumn}>
-          <AddIcon />
-        </IconButton>
-      </TableRow>
-    </TableHead>
-    <TableBody>
-      {side.map((_, i) => (
-        <TableRow key={`row_${i}`}>
-          <EditableCell key={`cell_${i}`} path={`${path}.side`} index={i} showDelete editable />
-          {header.map((_, i) => <TableCell key={`other_cell_${i}`}>...</TableCell>)}
+  <div className={classes.tableContainer}>
+    <Title path={path} xLarge />
+    <Table className={classes.surveyTable}>
+      <TableHead>
+        <TableRow>
+          <TableCell />
+          {header.map((_, i) => (
+            <EditableCell key={`edit_${i}`} path={`${path}.header`} index={i} showDelete editable />
+          ))}
+          <IconButton onClick={addColumn}>
+            <AddIcon />
+          </IconButton>
         </TableRow>
-      ))}
-    </TableBody>
-    <IconButton onClick={addRow}>
-      <AddIcon />
-    </IconButton>
-    <Tooltip id="tooltip-icon" title="Delete">
-      <IconButton aria-label="Delete" onClick={deleteTable}>
-        <DeleteIcon />
+      </TableHead>
+      <TableBody>
+        {side.map((_, i) => (
+          <TableRow key={`row_${i}`}>
+            <EditableCell key={`cell_${i}`} path={`${path}.side`} index={i} showDelete editable />
+            {header.map((_, i) => <TableCell key={`other_cell_${i}`}>...</TableCell>)}
+          </TableRow>
+        ))}
+      </TableBody>
+      <IconButton onClick={addRow}>
+        <AddIcon />
       </IconButton>
-    </Tooltip>
-  </Table>
+      <Tooltip id="tooltip-icon" title="Delete">
+        <IconButton aria-label="Delete" onClick={deleteTable}>
+          <DeleteIcon />
+        </IconButton>
+      </Tooltip>
+    </Table>
+  </div>
 )
 
 export default compose(
