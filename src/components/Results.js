@@ -2,7 +2,7 @@ import React, {Fragment} from 'react'
 import {compose} from 'redux'
 import {connect} from 'react-redux'
 import {branch, withHandlers, withProps} from 'recompose'
-import {withRouter} from 'react-router-dom'
+import {withRouter, Link} from 'react-router-dom'
 import {withDataProviders} from 'data-provider'
 import {get} from 'lodash'
 import {submitSurvey, clearStoredData, loadOrClearSurvey} from '../actions'
@@ -32,10 +32,13 @@ const styles = (theme) => ({
   button: {
     margin: 10,
   },
+  link: {
+    display: 'block',
+  },
 })
 
 const Results = ({id, results, classes}) => {
-  const {tables, title} = results
+  const {tables, title, note} = results
   const path = `results[${id}]`
   return (
     <div className={classes.root}>
@@ -43,6 +46,13 @@ const Results = ({id, results, classes}) => {
         <Typography variant="display2" gutterBottom>
           {title}
         </Typography>
+        <Typography gutterBottom>Odkaz na dotazník: </Typography>
+        <a href={`${window.location.origin}/survey/${id}`}>
+          <Typography variant="button" gutterBottom>
+            {`${window.location.origin}/survey/${id}`}
+          </Typography>
+        </a>
+        <Typography gutterBottom>{note}</Typography>
         {tables.map((t, i) => {
           const tablePath = `${path}.tables[${i}]`
           switch (t.type) {
