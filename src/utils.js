@@ -48,7 +48,6 @@ export const unparseTables = (tables) =>
   tables.map((t) => {
     let {header, data} = t
     if (t.side) {
-      header = header && [' ', ...header]
       data = data.map((row, i) => (Array.isArray(row) ? [t.side[i], ...row] : [t.side[i], row]))
     }
     return unparse({

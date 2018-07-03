@@ -1,5 +1,5 @@
 // polyfills
-import 'regenerator-runtime/runtime'
+import 'babel-polyfill'
 import 'whatwg-fetch'
 import Promise from 'bluebird'
 
