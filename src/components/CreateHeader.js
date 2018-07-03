@@ -23,13 +23,20 @@ const styles = (theme) => ({
 const CreateHeader = ({path, data, activeCell, addRow, classes}) => (
   <div className={classes.tableContainer}>
     <Typography variant="title" gutterBottom>
-      Hlavicka
+      Hlavička
     </Typography>
     <Table className={classes.surveyTable}>
       <TableBody>
         {data.map((_, i) => (
           <TableRow key={i}>
-            <EditableCell key={`edit_${i}`} path={`${path}.side`} index={i} showDelete editable />
+            <EditableCell
+              key={`edit_${i}`}
+              path={`${path}.side`}
+              index={i}
+              showDelete
+              editable
+              label={'Zadajte názov riadku'}
+            />
           </TableRow>
         ))}
       </TableBody>

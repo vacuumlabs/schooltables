@@ -14,6 +14,7 @@ import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
+import InsertDriveFile from '@material-ui/icons/InsertDriveFile'
 
 const styles = (theme) => ({
   container: {
@@ -36,6 +37,7 @@ const styles = (theme) => ({
   button: {
     margin: 20,
     alignSelf: 'center',
+    float: 'right',
   },
 })
 
@@ -44,13 +46,13 @@ const SurveyList = ({data, classes}) => {
     <div className={classes.container}>
       <Paper className={classes.paper}>
         <Typography variant="headline" gutterBottom>
-          Zoznam
+          Zoznam existujúcich dotazníkov
         </Typography>
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
-              <TableCell>Datum</TableCell>
-              <TableCell>Nazov</TableCell>
+              <TableCell>Dátum</TableCell>
+              <TableCell>Názov</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -66,9 +68,9 @@ const SurveyList = ({data, classes}) => {
         </Table>
       </Paper>
       <Link to="/create">
-        <Button variant="outlined" className={classes.button}>
-          <Add className={classes.leftIcon} />
-          Pridat formular
+        <Button variant="contained" color="primary" className={classes.button}>
+          <InsertDriveFile className={classes.leftIcon} />
+          Vytvoriť nový dotazník
         </Button>
       </Link>
     </div>

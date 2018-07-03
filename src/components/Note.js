@@ -16,11 +16,11 @@ const styles = (theme) => ({
 
 const Note = ({value, onChange, classes}) => (
   <TextField
-    label={'Poznámky'}
+    label={'Priestor na poznámky'}
     value={value == null ? '' : value}
     margin="normal"
     multiline
-    rows="2"
+    rows="3"
     fullWidth
     className={classes.field}
     onChange={onChange}

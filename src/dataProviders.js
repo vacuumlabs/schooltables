@@ -4,9 +4,13 @@ const dispatchReceivedData = (path, mappingFn, ...mappingFnArgs) => (ref, data, 
   dispatch(receiveData(path, data, ref, mappingFn, ...mappingFnArgs))
 }
 
-const returnedByDummy = () => undefined
+function returnedByDummy() {
+  return undefined
+}
 
-const dummy = () => returnedByDummy
+function dummy() {
+  return returnedByDummy
+}
 
 export const adminCheckProvider = (pushHistory) => ({
   ref: 'adminCheck',
@@ -14,9 +18,9 @@ export const adminCheckProvider = (pushHistory) => ({
     fetch,
     `${process.env.REACT_APP_API_URL || ''}/admin/check`,
     {
-      headers: new Headers({
+      headers: {
         'X-Token': window.localStorage.getItem('token'),
-      }),
+      },
     },
   ],
   onData: [dummy],
@@ -30,9 +34,9 @@ export const resourceProvider = (id) => ({
     `${process.env.REACT_APP_API_URL || ''}/api/resources/${id}`,
     {
       accept: 'application/json',
-      headers: new Headers({
+      headers: {
         'X-Token': window.localStorage.getItem('token'),
-      }),
+      },
     },
   ],
   onData: [dispatchReceivedData, ['resources']],
@@ -45,9 +49,9 @@ export const surveyListProvider = (pushHistory) => ({
     `${process.env.REACT_APP_API_URL || ''}/admin/surveys`,
     {
       accept: 'application/json',
-      headers: new Headers({
+      headers: {
         'X-Token': window.localStorage.getItem('token'),
-      }),
+      },
     },
   ],
   onData: [dispatchReceivedData, ['surveyList']],
@@ -61,9 +65,9 @@ export const surveyProvider = (id) => ({
     `${process.env.REACT_APP_API_URL || ''}/api/survey/${id}`,
     {
       accept: 'application/json',
-      headers: new Headers({
+      headers: {
         'X-Token': window.localStorage.getItem('token'),
-      }),
+      },
     },
   ],
   onData: [dispatchReceivedData],
@@ -76,9 +80,9 @@ export const resultsProvider = (id, pushHistory) => ({
     `${process.env.REACT_APP_API_URL || ''}/admin/results/${id}`,
     {
       accept: 'application/json',
-      headers: new Headers({
+      headers: {
         'X-Token': window.localStorage.getItem('token'),
-      }),
+      },
     },
   ],
   onData: [dispatchReceivedData, ['results']],

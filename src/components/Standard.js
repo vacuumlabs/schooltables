@@ -10,7 +10,7 @@ import TableBody from '@material-ui/core/TableBody'
 import TableHead from '@material-ui/core/TableHead'
 import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
-import IconButton from '@material-ui/core/IconButton'
+import Button from '@material-ui/core/Button'
 import AddIcon from '@material-ui/icons/Add'
 import EditableCell from './EditableCell'
 import {addRowOnPathSurvey} from '../actions'
@@ -19,6 +19,12 @@ import {tableContainer, surveyTable} from '../styles'
 const styles = (theme) => ({
   tableContainer,
   surveyTable,
+  leftIcon: {
+    marginRight: theme.spacing.unit,
+  },
+  button: {
+    marginTop: theme.spacing.unit * 2,
+  },
 })
 
 const Standard = ({path, data, header, addRow, classes, editable, title}) => (
@@ -47,9 +53,9 @@ const Standard = ({path, data, header, addRow, classes, editable, title}) => (
         ))}
       </TableBody>
       {editable && (
-        <IconButton onClick={addRow}>
-          <AddIcon />
-        </IconButton>
+        <Button variant="contained" color="primary" className={classes.button} onClick={addRow}>
+          <AddIcon /> Pridať riadok
+        </Button>
       )}
     </Table>
   </div>

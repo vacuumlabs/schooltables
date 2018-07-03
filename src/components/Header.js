@@ -19,7 +19,7 @@ const styles = (theme) => ({
 const Header = ({path, data, side, activeCell, classes, editable}) => (
   <div className={classes.tableContainer}>
     <Typography variant="title" gutterBottom>
-      Hlavicka
+      Hlavička
     </Typography>
     <Table className={classes.surveyTable}>
       <TableBody>

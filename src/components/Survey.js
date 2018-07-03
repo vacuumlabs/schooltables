@@ -9,30 +9,43 @@ import {submitSurvey, clearStoredData, loadOrClearSurvey} from '../actions'
 import {paramsOrCreateSelector} from '../selectors'
 import {surveyProvider} from '../dataProviders'
 import {downloadCsv} from '../utils'
+import {root} from '../styles'
 import {withStyles} from '@material-ui/core/styles'
+import Tooltip from '@material-ui/core/Tooltip'
 import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
 import Delete from '@material-ui/icons/Delete'
-import Check from '@material-ui/icons/Check'
+import Send from '@material-ui/icons/Send'
+import Cancel from '@material-ui/icons/Cancel'
 import Typography from '@material-ui/core/Typography'
 import DownloadIcon from '@material-ui/icons/CloudDownload'
+import ArrowBack from '@material-ui/icons/ArrowBack'
 import Header from './Header'
 import Standard from './Standard'
 import Rectangular from './Rectangular'
 
 const styles = (theme) => ({
-  root: {
-    width: '100%',
-    padding: 50,
-  },
+  root,
   paper: {
     display: 'block',
     marginBottom: 20,
-    padding: 20,
+    padding: '2rem',
     paddingTop: theme.spacing.unit * 2,
   },
   button: {
     margin: 10,
+  },
+  returnButton: {
+    margin: theme.spacing.unit,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+  },
+  leftIcon: {
+    marginRight: theme.spacing.unit,
+  },
+  topMargin: {
+    marginTop: 10,
   },
 })
 
@@ -50,9 +63,6 @@ class Survey extends React.Component {
   componentDidUpdate = () => {
     const id = paramsOrCreateSelector(undefined, this.props)
     if (id !== 'create' && this.state.loaded) {
-      console.log('passed create')
-      console.log(this.props.data)
-      console.log(JSON.stringify(this.props.data))
       window.localStorage.setItem(id, JSON.stringify(this.props.data))
     }
     return null
@@ -67,7 +77,7 @@ class Survey extends React.Component {
         <div className={classes.root}>
           <Paper className={classes.paper}>
             <Typography variant="subheading" gutterBottom>
-              Dakujeme za vyplnenie formularu
+              Ďakujeme za vyplnenie formulara
             </Typography>
             <Button
               variant="contained"
@@ -75,13 +85,20 @@ class Survey extends React.Component {
               className={classes.button}
               onClick={saveCsv}
             >
-              Save .csv
-              <DownloadIcon className={classes.rightIcon} />
+              <DownloadIcon className={classes.leftIcon} />
+              Stiahnuť .csv
             </Button>
-            <Button variant="outlined" className={classes.button} onClick={deleteSurvey}>
-              <Delete className={classes.leftIcon} />
-              Vyplnit novy formular
-            </Button>
+            <Tooltip title="Zmaže všetky uložené dáta">
+              <Button
+                variant="contained"
+                color="secondary"
+                className={classes.button}
+                onClick={deleteSurvey}
+              >
+                <Delete className={classes.leftIcon} />
+                Vyplniť znova
+              </Button>
+            </Tooltip>
           </Paper>
         </div>
       )
@@ -89,14 +106,17 @@ class Survey extends React.Component {
     return (
       <div className={classes.root}>
         {preview && (
-          <Link to="/create">
-            <Paper className={classes.paper}>
-              <Typography gutterBottom>Náhľad práve vytváranej tabulky.</Typography>
-              <Typography variant="button" gutterBottom>
-                Kliknutím sa vrátite na pôvodnú obrazovku.
-              </Typography>
+          <Fragment>
+            <Link to="/create">
+              <Button className={classes.returnButton}>
+                <ArrowBack className={classes.leftIcon} />
+                Späť
+              </Button>
+            </Link>
+            <Paper className={`${classes.paper} ${classes.topMargin}`}>
+              <Typography>Náhľad práve vytváranej tabulky.</Typography>
             </Paper>
-          </Link>
+          </Fragment>
         )}
         <Paper className={classes.paper}>
           <Typography variant="display2" gutterBottom>
@@ -119,15 +139,25 @@ class Survey extends React.Component {
           {paramsOrCreateSelector(undefined, this.props) !== 'create' && (
             <div className={classes.button}>
               <Typography variant="subheading" gutterBottom>
-                Dokoncit
+                Dokončiť
               </Typography>
-              <Button variant="outlined" className={classes.button} onClick={deleteSurvey}>
-                <Delete className={classes.leftIcon} />
-                Zmazat formular
+              <Button
+                variant="contained"
+                color="secondary"
+                className={classes.button}
+                onClick={deleteSurvey}
+              >
+                <Cancel className={classes.leftIcon} />
+                Zmazať formulár
               </Button>
-              <Button variant="outlined" className={classes.button} onClick={submit}>
-                <Check className={classes.leftIcon} />
-                Dokoncit formular
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.button}
+                onClick={submit}
+              >
+                <Send className={classes.leftIcon} />
+                Dokončiť formulár
               </Button>
             </div>
           )}

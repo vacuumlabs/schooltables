@@ -5,6 +5,7 @@ import {branch, withHandlers, withProps} from 'recompose'
 import {withRouter, Link} from 'react-router-dom'
 import {withDataProviders} from 'data-provider'
 import {get} from 'lodash'
+import {root} from '../styles'
 import {submitSurvey, clearStoredData, loadOrClearSurvey} from '../actions'
 import {paramsIdSelector, resultsSelector} from '../selectors'
 import {resultsProvider} from '../dataProviders'
@@ -17,28 +18,36 @@ import Delete from '@material-ui/icons/Delete'
 import Check from '@material-ui/icons/Check'
 import Icon from '@material-ui/core/Icon'
 import DownloadIcon from '@material-ui/icons/CloudDownload'
+import ArrowBack from '@material-ui/icons/ArrowBack'
 import Title from './Title'
 import Header from './Header'
 import Standard from './Standard'
 import Rectangular from './Rectangular'
 
 const styles = (theme) => ({
-  root: {
-    width: '100%',
-    padding: 50,
-  },
+  root,
   paper: {
     overflowX: 'auto',
-    padding: 20,
+    padding: '2rem',
     paddingTop: theme.spacing.unit * 2,
     marginBottom: 20,
+    marginTop: 20,
   },
   button: {
     margin: theme.spacing.unit,
   },
+  returnButton: {
+    margin: theme.spacing.unit,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+  },
   link: {
     display: 'block',
     marginBottom: 20,
+  },
+  leftIcon: {
+    marginRight: theme.spacing.unit,
   },
 })
 
@@ -48,9 +57,10 @@ const Results = ({id, results, classes, saveCsv}) => {
   return (
     <div className={classes.root}>
       <Link to="/surveys">
-        <Paper className={classes.paper}>
-          <Typography>Návrat na zoznam dotazníkov.</Typography>
-        </Paper>
+        <Button className={classes.returnButton}>
+          <ArrowBack className={classes.leftIcon} />
+          Späť na zoznam
+        </Button>
       </Link>
       <Paper className={classes.paper}>
         <Typography variant="display2" gutterBottom>
@@ -58,7 +68,7 @@ const Results = ({id, results, classes, saveCsv}) => {
         </Typography>
         <Typography gutterBottom>Odkaz na dotazník: </Typography>
         <a href={`${window.location.origin}/survey/${id}`} className={classes.link}>
-          <Typography variant="button" gutterBottom>
+          <Typography variant="caption" gutterBottom>
             {`${window.location.origin}/survey/${id}`}
           </Typography>
         </a>
@@ -77,8 +87,8 @@ const Results = ({id, results, classes, saveCsv}) => {
           }
         })}
         <Button variant="contained" color="primary" className={classes.button} onClick={saveCsv}>
-          Save .csv
-          <DownloadIcon className={classes.rightIcon} />
+          <DownloadIcon className={classes.leftIcon} />
+          Stiahnuť .csv
         </Button>
       </Paper>
     </div>

@@ -16,7 +16,7 @@ const styles = (theme) => ({
 
 const Title = ({value, onChange, xLarge, xxLarge, classes}) => (
   <TextField
-    label={'Zadajte nazov'}
+    label={xxLarge ? 'Zadajte názov dotazníku' : 'Zadajte názov tabulky'}
     value={value == null ? '' : value}
     margin="normal"
     onChange={onChange}

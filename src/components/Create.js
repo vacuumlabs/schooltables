@@ -9,10 +9,14 @@ import {withStyles} from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
+import Tooltip from '@material-ui/core/Tooltip'
+import Send from '@material-ui/icons/Send'
+import Cancel from '@material-ui/icons/Cancel'
+import Search from '@material-ui/icons/Search'
 import ViewQuilt from '@material-ui/icons/ViewQuilt'
 import ViewStream from '@material-ui/icons/ViewStream'
 import Delete from '@material-ui/icons/Delete'
-import Check from '@material-ui/icons/Check'
+import ArrowBack from '@material-ui/icons/ArrowBack'
 import {
   clearStoredData,
   loadOrClearSurvey,
@@ -20,6 +24,7 @@ import {
   addStandard,
   submitCreate,
 } from '../actions'
+import {root} from '../styles'
 import Title from './Title'
 import Note from './Note'
 import CreateHeader from './CreateHeader'
@@ -27,13 +32,11 @@ import CreateStandard from './CreateStandard'
 import CreateRectangular from './CreateRectangular'
 
 const styles = (theme) => ({
-  root: {
-    width: '100%',
-    padding: 50,
-  },
+  root,
   paper: {
-    padding: 20,
+    padding: '2rem',
     paddingTop: theme.spacing.unit * 2,
+    marginTop: 20,
   },
   iconButton: {
     position: 'absolute',
@@ -42,8 +45,17 @@ const styles = (theme) => ({
   button: {
     margin: theme.spacing.unit,
   },
+  returnButton: {
+    margin: theme.spacing.unit,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+  },
   leftIcon: {
     marginRight: theme.spacing.unit,
+  },
+  subheading: {
+    marginTop: '1rem',
   },
 })
 
@@ -71,6 +83,12 @@ class CreateSurvey extends React.Component {
     const {tables} = data
     return (
       <div className={classes.root}>
+        <Link to="/surveys">
+          <Button className={classes.returnButton}>
+            <ArrowBack className={classes.leftIcon} />
+            Späť na zoznam
+          </Button>
+        </Link>
         <Paper className={classes.paper}>
           <Title path={path} xxLarge />
           <Note path={path} />
@@ -88,35 +106,51 @@ class CreateSurvey extends React.Component {
             }
           })}
           <div>
-            <Typography variant="subheading" gutterBottom>
-              Pridat
+            <Typography variant="subheading" gutterBottom className={classes.subheading}>
+              Pridať
             </Typography>
-            <Button variant="outlined" className={classes.button} onClick={addRectangular}>
-              <ViewQuilt className={classes.leftIcon} />
-              2D tabulka
-            </Button>
-            <Button variant="outlined" className={classes.button} onClick={addStandard}>
-              <ViewStream className={classes.leftIcon} />
-              Standard tabulka
-            </Button>
+            <Tooltip title="Tabulka so zadaným počtom a názvami stĺpcov">
+              <Button variant="contained" className={classes.button} onClick={addStandard}>
+                <ViewStream className={classes.leftIcon} />
+                Tabulka
+              </Button>
+            </Tooltip>
+            <Tooltip title="Tabulka so zadanými stĺpaci a riadkami">
+              <Button variant="contained" className={classes.button} onClick={addRectangular}>
+                <ViewQuilt className={classes.leftIcon} />
+                2D tabulka
+              </Button>
+            </Tooltip>
           </div>
           <div>
-            <Typography variant="subheading" gutterBottom>
-              Dokoncit
+            <Typography variant="subheading" gutterBottom className={classes.subheading}>
+              Dokončiť
             </Typography>
-            <Link to="/preview">
-              <Button variant="outlined" className={classes.button}>
-                <Check className={classes.leftIcon} />
-                Nahlad
-              </Button>
-            </Link>
-            <Button variant="outlined" className={classes.button} onClick={deleteForm}>
-              <Delete className={classes.leftIcon} />
-              Zmazat formular
+            <Tooltip title="Náhlad na výsledný interaktívny dotazník">
+              <Link to="/preview">
+                <Button variant="contained" className={classes.button}>
+                  <Search className={classes.leftIcon} />
+                  Náhľad
+                </Button>
+              </Link>
+            </Tooltip>
+            <Button
+              variant="contained"
+              color="secondary"
+              className={classes.button}
+              onClick={deleteForm}
+            >
+              <Cancel className={classes.leftIcon} />
+              Zmazať formulár
             </Button>
-            <Button variant="outlined" className={classes.button} onClick={submitForm}>
-              <Check className={classes.leftIcon} />
-              Dokoncit formular
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              onClick={submitForm}
+            >
+              <Send className={classes.leftIcon} />
+              Dokončiť formulár
             </Button>
           </div>
         </Paper>

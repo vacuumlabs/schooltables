@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 import {get} from 'lodash'
 import {compose} from 'redux'
 import {connect} from 'react-redux'
@@ -12,6 +12,7 @@ import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import IconButton from '@material-ui/core/IconButton'
+import Button from '@material-ui/core/Button'
 import AddIcon from '@material-ui/icons/Add'
 import EditableCell from './EditableCell'
 import Title from './Title'
@@ -24,29 +25,36 @@ const styles = (theme) => ({
 })
 
 const CreateStandard = ({path, header, data, classes, addColumn, deleteTable}) => (
-  <div className={classes.tableContainer}>
-    <Title path={path} xLarge />
-    <Table className={classes.surveyTable}>
-      <TableHead>
-        <TableRow>
-          {header.map((_, i) => (
-            <EditableCell key={`edit_${i}`} path={`${path}.header`} index={i} showDelete editable />
-          ))}
-          <IconButton onClick={addColumn}>
-            <AddIcon />
-          </IconButton>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        <TableRow>{header.map((_, i) => <TableCell key={i}>...</TableCell>)}</TableRow>
-      </TableBody>
-      <Tooltip id="tooltip-icon" title="Delete">
-        <IconButton aria-label="Delete" onClick={deleteTable}>
-          <DeleteIcon />
-        </IconButton>
-      </Tooltip>
-    </Table>
-  </div>
+  <Fragment>
+    <div className={classes.tableContainer}>
+      <Title path={path} xLarge />
+      <Table className={classes.surveyTable}>
+        <TableHead>
+          <TableRow>
+            {header.map((_, i) => (
+              <EditableCell
+                key={`edit_${i}`}
+                path={`${path}.header`}
+                index={i}
+                showDelete
+                editable
+                label={'Zadajte názov stĺpca'}
+              />
+            ))}
+            <IconButton onClick={addColumn}>
+              <AddIcon />
+            </IconButton>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          <TableRow>{header.map((_, i) => <TableCell key={i}>...</TableCell>)}</TableRow>
+        </TableBody>
+      </Table>
+    </div>
+    <Button variant="contained" color="secondary" aria-label="Delete" onClick={deleteTable}>
+      <DeleteIcon /> Zmazať tabulku
+    </Button>
+  </Fragment>
 )
 
 export default compose(

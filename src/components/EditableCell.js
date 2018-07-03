@@ -18,11 +18,25 @@ const styles = (theme) => ({
   },
 })
 
-const EditableCell = ({value, onChange, onDelete, children, showDelete, editable, classes}) => (
+const EditableCell = ({
+  value,
+  onChange,
+  onDelete,
+  children,
+  showDelete,
+  editable,
+  classes,
+  label,
+}) => (
   <TableCell>
     <div className={classes.container}>
       {editable ? (
-        <TextField value={value == null ? '' : value} margin="normal" onChange={onChange} />
+        <TextField
+          value={value == null ? '' : value}
+          margin="normal"
+          onChange={onChange}
+          label={label}
+        />
       ) : (
         value
       )}
