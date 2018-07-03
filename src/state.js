@@ -1,6 +1,6 @@
 export const emptyRectangular = {
   type: 'rectangular',
-  header: [''],
+  header: ['', ''],
   side: [''],
   data: [[]],
 }

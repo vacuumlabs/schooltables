@@ -36,16 +36,10 @@ export const validateRectangularData = (data, numColumns, numRows) => {
 }
 
 export const createEmptyRectangularData = (columns, rows = 1) => {
-  console.log('create mepty')
-  console.log(columns)
-  console.log(rows)
   const result = []
   for (let i = 0; i < rows; i++) {
     result.push([...Array(columns)].map((c) => ''))
   }
-  console.log('create empty')
-  console.log(columns)
-  console.log(result)
   return result
 }
 
@@ -66,7 +60,6 @@ export const unparseTables = (tables) =>
 // Function to download data to a file
 //https://stackoverflow.com/questions/13405129/javascript-create-and-save-file
 export function download(data, filename, type) {
-  console.log('wat?')
   const file = new Blob([data], {type})
   if (window.navigator.msSaveOrOpenBlob) {
     // IE10+

@@ -49,7 +49,7 @@ export const clearStoredData = (path) => ({
         case 'rectangular':
           return {
             ...table,
-            data: createEmptyRectangularData(table.header.length, table.side.length),
+            data: createEmptyRectangularData(table.header.length - 1, table.side.length),
           }
         default:
           return table
@@ -86,15 +86,12 @@ export const loadOrClearSurvey = (path) => ({
         case 'rectangular':
           return {
             ...table,
-            data: createEmptyRectangularData(table.header.length, table.side.length),
+            data: createEmptyRectangularData(table.header.length - 1, table.side.length),
           }
         default:
           return table
       }
     })
-    console.log('----')
-    console.log(JSON.parse(saved))
-    console.log(surveyToUse)
     return {
       ...surveyToUse,
       tables,
@@ -137,7 +134,7 @@ export const clearSurveyData = (path) => ({
         case 'rectangular':
           return {
             ...table,
-            data: createEmptyRectangularData(table.header.length, table.side.length),
+            data: createEmptyRectangularData(table.header.length - 1, table.side.length),
           }
         default:
           return table
@@ -212,11 +209,7 @@ export const login = (pushHistory, name, password) => async (dispatch, getState)
 }
 
 export const submitCreate = (pushHistory) => async (dispatch, getState) => {
-  console.log('create start')
-  console.log(getState().create)
   dispatch(clearSurveyData('create'))
-  console.log('after clear')
-  console.log(getState().create)
   try {
     const res = await fetch(`${process.env.REACT_APP_API_URL || ''}/admin/create`, {
       method: 'POST',

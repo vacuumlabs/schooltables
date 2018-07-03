@@ -34,7 +34,6 @@ const CreateRectangular = ({path, header, side, classes, addColumn, addRow, dele
       <Table className={classes.surveyTable}>
         <TableHead>
           <TableRow>
-            <TableCell />
             {header.map((_, i) => (
               <EditableCell
                 key={`edit_${i}`}

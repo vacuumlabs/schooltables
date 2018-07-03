@@ -26,10 +26,7 @@ const Rectangular = ({path, header, side, classes, data, editable, title}) => (
     )}
     <Table className={classes.surveyTable}>
       <TableHead>
-        <TableRow>
-          <TableCell />
-          {header.map((c, i) => <TableCell key={i}>{c}</TableCell>)}
-        </TableRow>
+        <TableRow>{header.map((c, i) => <TableCell key={i}>{c}</TableCell>)}</TableRow>
       </TableHead>
       <TableBody>
         {side.map((c, i) => (

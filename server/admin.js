@@ -59,11 +59,6 @@ router.get('/surveys', async (req, res, next) => {
 })
 
 const getResults = (results, definition) => {
-  // rectangulars handled on their own
-  const rectIds = []
-  const header = []
-  console.log('---')
-  console.log(results)
   const data = []
   const {tables} = definition.data
 
@@ -80,24 +75,19 @@ const getResults = (results, definition) => {
 
   // assert only non-header left
   for (let i = 1; i < tables.length; i++) {
-    if (tables[i].type === 'standard') {
-      data.push({
-        type: 'standard',
-        header: tables[0].side.concat(tables[i].header),
-        data: _.flatten(
-          results.map((r) => r.data[i].data.map((row) => r.data[0].data.concat(row)))
-        ),
-      })
-    } else if (tables[i].type === 'rectangular') {
-      results.forEach((r) => {
-        // add header table before each
-        data.push(r.data[0])
-        data.push(r.data[i])
-      })
-    } else {
-      console.log('should not happen - standard or rect expected')
-      console.log(tables[i])
-    }
+    data.push({
+      type: 'standard',
+      header: tables[0].side.concat(tables[i].header),
+      data: _.flatten(
+        results.map((r) =>
+          r.data[i].data.map((row, j) =>
+            r.data[0].data.concat(
+              tables[i].type === 'rectangular' ? [r.data[i].side[j], ...row] : row
+            )
+          )
+        )
+      ),
+    })
   }
   return data
 }
