@@ -58,7 +58,7 @@ const SurveyList = ({data, classes}) => {
           <TableBody>
             {Object.values(data).map((row, i) => (
               <TableRow key={i}>
-                <TableCell>{row.created_at}</TableCell>
+                <TableCell>{new Date(row.created_at).toLocaleString()}</TableCell>
                 <TableCell>
                   <Link to={`/results/${row.id}`}>{row.data.title}</Link>
                 </TableCell>
