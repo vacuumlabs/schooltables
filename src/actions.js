@@ -29,6 +29,12 @@ export const setActiveCell = (path) => ({
   reducer: () => path,
 })
 
+export const clearCreateData = () => ({
+  type: 'Clear create data',
+  path: 'create',
+  reducer: (create) => getInitialState().create,
+})
+
 export const clearStoredData = (path) => ({
   type: 'Clear stored data',
   path,

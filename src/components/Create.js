@@ -18,7 +18,7 @@ import ViewStream from '@material-ui/icons/ViewStream'
 import Delete from '@material-ui/icons/Delete'
 import ArrowBack from '@material-ui/icons/ArrowBack'
 import {
-  clearStoredData,
+  clearCreateData,
   loadOrClearSurvey,
   addRectangular,
   addStandard,
@@ -169,10 +169,10 @@ export default compose(
     (state, props) => ({
       data: state.create,
     }),
-    {addRectangular, addStandard, clearStoredData, loadOrClearSurvey, submitCreate}
+    {addRectangular, addStandard, clearCreateData, loadOrClearSurvey, submitCreate}
   ),
   withHandlers({
-    deleteForm: ({clearStoredData}) => () => clearStoredData('create'),
+    deleteForm: ({clearCreateData}) => () => clearCreateData('create'),
     submitForm: ({submitCreate, history}) => () => submitCreate(history.push),
   })
 )(CreateSurvey)
