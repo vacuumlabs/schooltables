@@ -26,7 +26,12 @@ const Header = ({path, data, side, activeCell, classes, editable}) => (
         {side.map((val, i) => (
           <TableRow key={i}>
             <TableCell>{val}</TableCell>
-            <EditableCell path={`${path}.data`} index={i} editable={editable} />
+            <EditableCell
+              path={`${path}.data`}
+              index={i}
+              editable={editable}
+              placeholder={'Prosím, vyplňte'}
+            />
           </TableRow>
         ))}
       </TableBody>

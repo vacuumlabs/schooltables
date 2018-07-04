@@ -27,6 +27,7 @@ const EditableCell = ({
   editable,
   classes,
   label,
+  placeholder,
 }) => (
   <TableCell>
     <div className={classes.container}>
@@ -36,6 +37,7 @@ const EditableCell = ({
           margin="normal"
           onChange={onChange}
           label={label}
+          placeholder={[placeholder]}
         />
       ) : (
         value
