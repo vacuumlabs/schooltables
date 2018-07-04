@@ -12,6 +12,7 @@ import configureStore from './configureStore'
 import './index.css'
 import App from './components/App'
 import registerServiceWorker from './registerServiceWorker'
+import 'react-datasheet/lib/react-datasheet.css'
 
 window.Promise = Promise
 const store = configureStore()

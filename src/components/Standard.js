@@ -3,6 +3,7 @@ import {get} from 'lodash'
 import {compose} from 'redux'
 import {connect} from 'react-redux'
 import {withHandlers} from 'recompose'
+import ReactDataSheet from 'react-datasheet'
 import {withStyles} from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Table from '@material-ui/core/Table'
@@ -13,51 +14,55 @@ import TableRow from '@material-ui/core/TableRow'
 import Button from '@material-ui/core/Button'
 import AddIcon from '@material-ui/icons/Add'
 import EditableCell from './EditableCell'
-import {addRowOnPathSurvey} from '../actions'
+import {addRowOnPathSurvey, updateValue} from '../actions'
+import {spreadsheetSelector} from '../selectors'
 import {tableContainer, surveyTable} from '../styles'
 
 const styles = (theme) => ({
   tableContainer,
-  surveyTable,
+  surveyTable: {
+    marginTop: 15,
+    ...surveyTable,
+  },
   leftIcon: {
     marginRight: theme.spacing.unit,
   },
   button: {
     marginTop: theme.spacing.unit * 2,
   },
+  headerCell: {
+    fontWeight: 'bold',
+    padding: '0.2rem 1rem !important',
+    color: `${theme.palette.text.primary} !important`,
+  },
+  cell: {
+    padding: '0.2rem 1rem !important',
+  },
 })
 
-const Standard = ({path, data, header, addRow, classes, editable, title}) => (
+const Standard = ({path, data, header, addRow, classes, editable, title, updateValue}) => (
   <div className={classes.tableContainer}>
     {title && (
       <Typography variant="title" gutterBottom>
         {title}
       </Typography>
     )}
-    <Table className={classes.surveyTable}>
-      <TableHead>
-        <TableRow>{header.map((c, i) => <TableCell key={i}>{c}</TableCell>)}</TableRow>
-      </TableHead>
-      <TableBody>
-        {data.map((row, i) => (
-          <TableRow key={`rowkey_${i}`}>
-            {row.map((c, j) => (
-              <EditableCell
-                key={`edit_${j}`}
-                path={`${path}.data[${i}]`}
-                index={j}
-                editable={editable}
-              />
-            ))}
-          </TableRow>
-        ))}
-      </TableBody>
-      {editable && (
-        <Button variant="contained" color="primary" className={classes.button} onClick={addRow}>
-          <AddIcon /> Pridať riadok
-        </Button>
-      )}
-    </Table>
+    <ReactDataSheet
+      className={classes.surveyTable}
+      data={data}
+      valueRenderer={(cell) => cell.value}
+      onCellsChanged={(changes) => {
+        changes.forEach(({cell, row, col, value}) => {
+          if (!cell) return
+          updateValue(`${path}.data[${row - 1}][${col}]`, value)
+        })
+      }}
+    />
+    {editable && (
+      <Button variant="contained" color="primary" className={classes.button} onClick={addRow}>
+        <AddIcon /> Pridať riadok
+      </Button>
+    )}
   </div>
 )
 
@@ -65,11 +70,14 @@ export default compose(
   withStyles(styles),
   connect(
     (state, props) => ({
-      header: get(state, `${props.path}.header`),
-      data: get(state, `${props.path}.data`),
+      data: spreadsheetSelector(
+        get(state, `${props.path}`),
+        props.classes.headerCell,
+        props.classes.cell
+      ),
       title: get(state, `${props.path}.title`),
     }),
-    {addRowOnPathSurvey}
+    {addRowOnPathSurvey, updateValue}
   ),
   withHandlers({
     addRow: ({path, addRowOnPathSurvey}) => () => addRowOnPathSurvey(`${path}.data`),

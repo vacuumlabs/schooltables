@@ -2,6 +2,7 @@ import React from 'react'
 import {get} from 'lodash'
 import {compose} from 'redux'
 import {connect} from 'react-redux'
+import ReactDataSheet from 'react-datasheet'
 import {withStyles} from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Table from '@material-ui/core/Table'
@@ -9,50 +10,59 @@ import TableBody from '@material-ui/core/TableBody'
 import TableHead from '@material-ui/core/TableHead'
 import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
-import EditableCell from './EditableCell'
+import {updateValue} from '../actions'
+import {spreadsheetSelector} from '../selectors'
 import {tableContainer, surveyTable} from '../styles'
 
 const styles = (theme) => ({
   tableContainer,
-  surveyTable,
+  surveyTable: {
+    marginTop: 15,
+    ...surveyTable,
+  },
+  headerCell: {
+    fontWeight: 'bold',
+    whiteSpace: 'pre !important',
+    padding: '0.2rem 1rem !important',
+    color: `${theme.palette.text.primary} !important`,
+  },
+  cell: {
+    padding: '0.2rem 1rem !important',
+  },
 })
 
-const Rectangular = ({path, header, side, classes, data, editable, title}) => (
+const Rectangular = ({path, header, side, classes, data, editable, title, updateValue}) => (
   <div className={classes.tableContainer}>
     {title && (
       <Typography variant="title" gutterBottom>
         {title}
       </Typography>
     )}
-    <Table className={classes.surveyTable}>
-      <TableHead>
-        <TableRow>{header.map((c, i) => <TableCell key={i}>{c}</TableCell>)}</TableRow>
-      </TableHead>
-      <TableBody>
-        {side.map((c, i) => (
-          <TableRow key={`_${i}`}>
-            <TableCell key={i}>{c}</TableCell>
-            {data[i].map((_, j) => (
-              <EditableCell
-                key={`edit_${j}`}
-                path={`${path}.data[${i}]`}
-                index={j}
-                editable={editable}
-              />
-            ))}
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <ReactDataSheet
+      className={classes.surveyTable}
+      data={data}
+      valueRenderer={(cell) => cell.value}
+      onCellsChanged={(changes) => {
+        changes.forEach(({cell, row, col, value}) => {
+          if (!cell) return
+          updateValue(`${path}.data[${row - 1}][${col - 1}]`, value)
+        })
+      }}
+    />
   </div>
 )
 
 export default compose(
   withStyles(styles),
-  connect((state, props) => ({
-    header: get(state, `${props.path}.header`),
-    side: get(state, `${props.path}.side`),
-    data: get(state, `${props.path}.data`),
-    title: get(state, `${props.path}.title`),
-  }))
+  connect(
+    (state, props) => ({
+      data: spreadsheetSelector(
+        get(state, `${props.path}`),
+        props.classes.headerCell,
+        props.classes.cell
+      ),
+      title: get(state, `${props.path}.title`),
+    }),
+    {updateValue}
+  )
 )(Rectangular)
