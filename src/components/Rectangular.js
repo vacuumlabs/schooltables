@@ -2,6 +2,7 @@ import React from 'react'
 import {get} from 'lodash'
 import {compose} from 'redux'
 import {connect} from 'react-redux'
+import {withHandlers} from 'recompose'
 import ReactDataSheet from 'react-datasheet'
 import {withStyles} from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
@@ -31,7 +32,7 @@ const styles = (theme) => ({
   },
 })
 
-const Rectangular = ({path, header, side, classes, data, editable, title, updateValue}) => (
+const Rectangular = ({path, header, side, classes, data, editable, title, onCellsChanged}) => (
   <div className={classes.tableContainer}>
     {title && (
       <Typography variant="title" gutterBottom>
@@ -42,12 +43,7 @@ const Rectangular = ({path, header, side, classes, data, editable, title, update
       className={classes.surveyTable}
       data={data}
       valueRenderer={(cell) => cell.value}
-      onCellsChanged={(changes) => {
-        changes.forEach(({cell, row, col, value}) => {
-          if (!cell) return
-          updateValue(`${path}.data[${row - 1}][${col - 1}]`, value)
-        })
-      }}
+      onCellsChanged={onCellsChanged}
     />
   </div>
 )
@@ -64,5 +60,13 @@ export default compose(
       title: get(state, `${props.path}.title`),
     }),
     {updateValue}
-  )
+  ),
+  withHandlers({
+    onCellsChanged: ({updateValue, path, editable}) => (changes) => {
+      changes.forEach(({cell, row, col, value}) => {
+        if (!cell) return
+        updateValue(`${path}.data[${row - 1}][${col - 1}]`, value)
+      })
+    },
+  })
 )(Rectangular)

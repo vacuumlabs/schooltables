@@ -40,7 +40,7 @@ const styles = (theme) => ({
   },
 })
 
-const Standard = ({path, data, header, addRow, classes, editable, title, updateValue}) => (
+const Standard = ({path, data, header, addRow, classes, editable, title, onCellsChanged}) => (
   <div className={classes.tableContainer}>
     {title && (
       <Typography variant="title" gutterBottom>
@@ -51,12 +51,7 @@ const Standard = ({path, data, header, addRow, classes, editable, title, updateV
       className={classes.surveyTable}
       data={data}
       valueRenderer={(cell) => cell.value}
-      onCellsChanged={(changes) => {
-        changes.forEach(({cell, row, col, value}) => {
-          if (!cell) return
-          updateValue(`${path}.data[${row - 1}][${col}]`, value)
-        })
-      }}
+      onCellsChanged={onCellsChanged}
     />
     {editable && (
       <Button variant="contained" color="primary" className={classes.button} onClick={addRow}>
@@ -81,5 +76,14 @@ export default compose(
   ),
   withHandlers({
     addRow: ({path, addRowOnPathSurvey}) => () => addRowOnPathSurvey(`${path}.data`),
+    onCellsChanged: ({updateValue, path, editable}) =>
+      editable
+        ? (changes) => {
+          changes.forEach(({cell, row, col, value}) => {
+            if (!cell) return
+            updateValue(`${path}.data[${row - 1}][${col}]`, value)
+          })
+        }
+        : () => undefined,
   })
 )(Standard)
