@@ -79,5 +79,5 @@ export function download(data, filename, type) {
 }
 
 export const downloadCsv = (tables, title) => {
-  download(unparseTables(tables).join('\r\n'), title, 'csv')
+  download(unparseTables(tables).join(',\r\n,\r\n'), title, 'csv')
 }
