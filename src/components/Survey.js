@@ -56,17 +56,19 @@ const styles = (theme) => ({
 class Survey extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {loaded: false}
+    // print is loaded right away by passed props, otherwise we try loading form store
+    this.state = {loaded: props.print}
   }
 
   componentDidMount = () => {
+    if (this.props.print) return
     this.props.loadOrClearSurvey(paramsOrCreateSelector(undefined, this.props))
     this.setState({loaded: true})
   }
 
   componentDidUpdate = () => {
     const id = paramsOrCreateSelector(undefined, this.props)
-    if (id !== 'create' && this.state.loaded) {
+    if (!this.props.print && id !== 'create' && this.state.loaded) {
       window.localStorage.setItem(id, JSON.stringify(this.props.data))
     }
     return null
@@ -198,7 +200,7 @@ export default compose(
   ),
   connect(
     (state, props) => ({
-      data: get(state, props.id),
+      data: state[props.id],
       path: props.id,
       preview: props.id === 'create',
     }),

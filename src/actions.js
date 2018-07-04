@@ -250,10 +250,8 @@ export const submitSurvey = (id, pushHistory) => async (dispatch, getState) => {
       body: JSON.stringify(getState()[id].tables),
     })
     if (res.ok) {
-      console.log('here?')
       dispatch(updateValue([id, 'done'], true))
     } else {
-      console.log('orhere?')
       console.log(res.status)
       console.log(res.statusText)
     }
