@@ -37,7 +37,7 @@ const EditableCell = ({
           margin="normal"
           onChange={onChange}
           label={label}
-          placeholder={[placeholder]}
+          placeholder={placeholder}
         />
       ) : (
         value

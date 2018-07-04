@@ -34,16 +34,21 @@ const CreateRectangular = ({path, header, side, classes, addColumn, addRow, dele
       <Table className={classes.surveyTable}>
         <TableHead>
           <TableRow>
-            {header.map((_, i) => (
-              <EditableCell
-                key={`edit_${i}`}
-                path={`${path}.header`}
-                index={i}
-                showDelete
-                editable
-                label={'Zadajte názov stĺpca'}
-              />
-            ))}
+            {header.map(
+              (_, i) =>
+                i === 0 ? (
+                  <TableCell key={`edit_${i}`} />
+                ) : (
+                  <EditableCell
+                    key={`edit_${i}`}
+                    path={`${path}.header`}
+                    index={i}
+                    showDelete
+                    editable
+                    label={'Zadajte názov stĺpca'}
+                  />
+                )
+            )}
             <Tooltip title="Pridať stĺpec">
               <IconButton onClick={addColumn}>
                 <AddIcon />
