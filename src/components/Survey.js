@@ -1,8 +1,9 @@
 import React, {Fragment} from 'react'
+import ReactToPrint from 'react-to-print'
 import {compose} from 'redux'
 import {connect} from 'react-redux'
 import {branch, withHandlers, withProps} from 'recompose'
-import {withRouter, Link} from 'react-router-dom'
+import {withRouter, Link, Route} from 'react-router-dom'
 import {withDataProviders} from 'data-provider'
 import {get} from 'lodash'
 import {submitSurvey, clearStoredData, loadOrClearSurvey} from '../actions'
@@ -47,6 +48,9 @@ const styles = (theme) => ({
   topMargin: {
     marginTop: 10,
   },
+  printRoot: {
+    margin: '20mm',
+  },
 })
 
 class Survey extends React.Component {
@@ -70,15 +74,24 @@ class Survey extends React.Component {
 
   render = () => {
     if (!this.state.loaded) return null
-    const {path, data, classes, submit, deleteSurvey, preview, saveCsv} = this.props
+    const {path, data, classes, submit, deleteSurvey, preview, saveCsv, print} = this.props
     const {tables, title, done, note} = data
-    if (done) {
+    if (done && !print) {
       return (
         <div className={classes.root}>
           <Paper className={classes.paper}>
             <Typography variant="subheading" gutterBottom>
               Ďakujeme za vyplnenie formulara
             </Typography>
+            <ReactToPrint
+              trigger={() => (
+                <Button variant="contained" className={classes.button}>
+                  <DownloadIcon className={classes.leftIcon} />
+                  Tlačiť
+                </Button>
+              )}
+              content={() => this.componentRef}
+            />
             <Button
               variant="contained"
               color="primary"
@@ -100,11 +113,15 @@ class Survey extends React.Component {
               </Button>
             </Tooltip>
           </Paper>
+          <div style={{display: 'none'}}>
+            <Survey {...this.props} print ref={(el) => (this.componentRef = el)} />
+          </div>
         </div>
       )
     }
+    const WrapperElement = print ? ({children}) => <div>{children}</div> : Paper
     return (
-      <div className={classes.root}>
+      <div className={print ? classes.printRoot : classes.root}>
         {preview && (
           <Fragment>
             <Link to="/create">
@@ -118,7 +135,7 @@ class Survey extends React.Component {
             </Paper>
           </Fragment>
         )}
-        <Paper className={classes.paper}>
+        <WrapperElement className={print || classes.paper}>
           <Typography variant="display2" gutterBottom>
             {title}
           </Typography>
@@ -127,19 +144,20 @@ class Survey extends React.Component {
             const tablePath = `${path}.tables[${i}]`
             switch (t.type) {
               case 'header':
-                return <Header key={`talbe_${i}`} path={tablePath} editable />
+                return <Header key={`talbe_${i}`} path={tablePath} editable={!print} />
               case 'standard':
-                return <Standard key={`talbe_${i}`} path={tablePath} editable />
+                return <Standard key={`talbe_${i}`} path={tablePath} editable={!print} />
               case 'rectangular':
-                return <Rectangular key={`talbe_${i}`} path={tablePath} editable />
+                return <Rectangular key={`talbe_${i}`} path={tablePath} editable={!print} />
               default:
                 return null
             }
           })}
-          {paramsOrCreateSelector(undefined, this.props) !== 'create' && (
+          {paramsOrCreateSelector(undefined, this.props) !== 'create' &&
+            !print && (
             <div className={classes.button}>
               <Typography variant="subheading" gutterBottom>
-                Dokončiť
+                  Dokončiť
               </Typography>
               <Button
                 variant="contained"
@@ -148,7 +166,7 @@ class Survey extends React.Component {
                 onClick={deleteSurvey}
               >
                 <Cancel className={classes.leftIcon} />
-                Zmazať formulár
+                  Zmazať formulár
               </Button>
               <Button
                 variant="contained"
@@ -157,11 +175,11 @@ class Survey extends React.Component {
                 onClick={submit}
               >
                 <Send className={classes.leftIcon} />
-                Dokončiť formulár
+                  Dokončiť formulár
               </Button>
             </div>
           )}
-        </Paper>
+        </WrapperElement>
       </div>
     )
   }

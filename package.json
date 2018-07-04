@@ -31,6 +31,7 @@
     "react-rnd": "^7.4.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4",
+    "react-to-print": "^1.0.20",
     "recompose": "^0.27.1",
     "redux": "^4.0.0",
     "redux-logger": "^3.0.6",
