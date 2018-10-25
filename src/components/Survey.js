@@ -84,7 +84,7 @@ class Survey extends React.Component {
         <div className={classes.root}>
           <Paper className={classes.paper}>
             <Typography variant="subheading" gutterBottom>
-              Ďakujeme za vyplnenie formulara
+              Ďakujeme za vyplnenie formulára
             </Typography>
             <ReactToPrint
               trigger={() => (
@@ -143,7 +143,7 @@ class Survey extends React.Component {
             {title}
           </Typography>
           {locked && (
-            <Typography title="Formular je zamknuty" gutterBottom>
+            <Typography title="Formulár je zamknutý" gutterBottom>
               <Lock style={{color: 'red'}} />
             </Typography>
           )}
@@ -181,7 +181,7 @@ class Survey extends React.Component {
                 color="primary"
                 className={classes.button}
                 onClick={submit}
-                title={locked && 'Formular je zamknuty'}
+                title={locked && 'Formulár je zamknutý'}
               >
                 {locked ? (
                   <Lock className={classes.leftIcon} />

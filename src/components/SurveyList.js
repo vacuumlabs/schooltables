@@ -53,7 +53,7 @@ const SurveyList = ({data, classes}) => {
           <TableHead>
             <TableRow>
               <TableCell>Dátum</TableCell>
-              <TableCell>Status</TableCell>
+              <TableCell>Stav</TableCell>
               <TableCell>Názov</TableCell>
             </TableRow>
           </TableHead>
