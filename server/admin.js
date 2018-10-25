@@ -54,6 +54,14 @@ router.post('/create', async (req, res) => {
   res.json({id: test[0]})
 })
 
+router.post('/lock', async (req, res) => {
+  await db('surveys')
+    .where('id', req.body.id)
+    .update({locked: req.body.locked})
+    .returning('id')
+  res.sendStatus(200)
+})
+
 router.get('/surveys', async (req, res, next) => {
   res.json(await db('surveys'))
 })

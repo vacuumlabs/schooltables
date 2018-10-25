@@ -260,3 +260,28 @@ export const submitSurvey = (id, pushHistory) => async (dispatch, getState) => {
     console.log(e)
   }
 }
+
+export const updateLocked = (id, locked) => async (dispatch, getState) => {
+  try {
+    const res = await fetch(`${process.env.REACT_APP_API_URL || ''}/admin/lock`, {
+      method: 'POST',
+      headers: new Headers({
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'X-Token': window.localStorage.getItem('token'),
+      }),
+      body: JSON.stringify({
+        id,
+        locked,
+      }),
+    })
+    if (res.ok) {
+      dispatch(updateValue(['surveyList', id, 'locked'], locked))
+    } else {
+      console.log(res.status)
+      console.log(res.statusText)
+    }
+  } catch (e) {
+    console.log(e)
+  }
+}
