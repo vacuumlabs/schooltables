@@ -20,7 +20,8 @@ export const emptyStandard = {
 const getInitialState = () => ({
   resources: {},
   surveys: {},
-  surveyList: [],
+  surveyList: {},
+  results: {},
   create: {
     title: '',
     tables: [

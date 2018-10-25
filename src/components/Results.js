@@ -23,6 +23,7 @@ import Title from './Title'
 import Header from './Header'
 import Standard from './Standard'
 import Rectangular from './Rectangular'
+import ToggleLocked from './ToggleLocked'
 
 const styles = (theme) => ({
   root,
@@ -65,6 +66,9 @@ const Results = ({id, results, classes, saveCsv}) => {
       <Paper className={classes.paper}>
         <Typography variant="display2" gutterBottom>
           {title}
+        </Typography>
+        <Typography gutterBottom>
+          <ToggleLocked locked={results.locked} surveyId={id} />
         </Typography>
         <Typography gutterBottom>Odkaz na dotazník: </Typography>
         <a href={`${window.location.origin}/survey/${id}`} className={classes.link}>

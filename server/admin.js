@@ -115,6 +115,7 @@ router.get('/results/:id', async (req, res, next) => {
     title: definition.data.title,
     note: definition.data.note,
     tables: getResults(results, definition),
+    locked: definition.locked,
   })
 })
 

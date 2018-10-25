@@ -276,7 +276,8 @@ export const updateLocked = (id, locked) => async (dispatch, getState) => {
       }),
     })
     if (res.ok) {
-      dispatch(updateValue(['surveyList', id, 'locked'], locked))
+      getState().surveyList[id] && dispatch(updateValue(['surveyList', id, 'locked'], locked))
+      getState().results[id] && dispatch(updateValue(['results', id, 'locked'], locked))
     } else {
       console.log(res.status)
       console.log(res.statusText)

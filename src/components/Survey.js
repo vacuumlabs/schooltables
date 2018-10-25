@@ -21,6 +21,7 @@ import Cancel from '@material-ui/icons/Cancel'
 import Typography from '@material-ui/core/Typography'
 import DownloadIcon from '@material-ui/icons/CloudDownload'
 import ArrowBack from '@material-ui/icons/ArrowBack'
+import Lock from '@material-ui/icons/Lock'
 import Header from './Header'
 import Standard from './Standard'
 import Rectangular from './Rectangular'
@@ -77,7 +78,7 @@ class Survey extends React.Component {
   render = () => {
     if (!this.state.loaded) return null
     const {path, data, classes, submit, deleteSurvey, preview, saveCsv, print} = this.props
-    const {tables, title, done, note} = data
+    const {tables, title, done, note, locked} = data
     if (done && !print) {
       return (
         <div className={classes.root}>
@@ -141,6 +142,11 @@ class Survey extends React.Component {
           <Typography variant="display2" gutterBottom>
             {title}
           </Typography>
+          {locked && (
+            <Typography title="Formular je zamknuty" gutterBottom>
+              <Lock style={{color: 'red'}} />
+            </Typography>
+          )}
           <Typography gutterBottom>{note}</Typography>
           {tables.map((t, i) => {
             const tablePath = `${path}.tables[${i}]`
@@ -175,8 +181,13 @@ class Survey extends React.Component {
                 color="primary"
                 className={classes.button}
                 onClick={submit}
+                title={locked && 'Formular je zamknuty'}
               >
-                <Send className={classes.leftIcon} />
+                {locked ? (
+                  <Lock className={classes.leftIcon} />
+                ) : (
+                  <Send className={classes.leftIcon} />
+                )}
                   Dokončiť formulár
               </Button>
             </div>
