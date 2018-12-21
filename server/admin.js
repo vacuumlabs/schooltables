@@ -62,6 +62,14 @@ router.post('/lock', async (req, res) => {
   res.sendStatus(200)
 })
 
+router.post('/archive', async (req, res) => {
+  await db('surveys')
+    .where('id', req.body.id)
+    .update({archived: req.body.archived})
+    .returning('id')
+  res.sendStatus(200)
+})
+
 router.get('/surveys', async (req, res, next) => {
   res.json(await db('surveys'))
 })

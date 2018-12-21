@@ -1,9 +1,10 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 import {compose} from 'redux'
 import {connect} from 'react-redux'
 import {Link, withRouter} from 'react-router-dom'
 import {withDataProviders} from 'data-provider'
 import {surveyListProvider} from '../dataProviders'
+import {updateArchived} from '../actions'
 import {withStyles} from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
@@ -42,43 +43,56 @@ const styles = (theme) => ({
   },
 })
 
-const SurveyList = ({data, classes}) => {
+const SurveyList = ({data, classes, archive, updateArchived}) => {
   return (
-    <div className={classes.container}>
-      <Paper className={classes.paper}>
-        <Typography variant="headline" gutterBottom>
-          Zoznam existujúcich dotazníkov
-        </Typography>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <TableCell>Dátum</TableCell>
-              <TableCell>Stav</TableCell>
-              <TableCell>Názov</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {Object.values(data).map((row, i) => (
-              <TableRow key={i}>
-                <TableCell>{new Date(row.created_at).toLocaleString()}</TableCell>
-                <TableCell>
-                  <ToggleLocked surveyId={row.id} locked={row.locked} />
-                </TableCell>
-                <TableCell>
-                  <Link to={`/results/${row.id}`}>{row.data.title}</Link>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Paper>
-      <Link to="/create">
-        <Button variant="contained" color="primary" className={classes.button}>
-          <InsertDriveFile className={classes.leftIcon} />
-          Vytvoriť nový dotazník
-        </Button>
+    <Fragment>
+      <Link to={archive ? 'surveys' : '/archive'}>
+        <Button className={classes.returnButton}>{archive ? 'Späť' : 'Archív'}</Button>
       </Link>
-    </div>
+      <div className={classes.container}>
+        <Paper className={classes.paper}>
+          <Typography variant="headline" gutterBottom>
+            Zoznam existujúcich dotazníkov
+          </Typography>
+          <Table className={classes.table}>
+            <TableHead>
+              <TableRow>
+                <TableCell>Dátum</TableCell>
+                <TableCell>Stav</TableCell>
+                <TableCell>Názov</TableCell>
+                <TableCell />
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {Object.values(data)
+                .filter((row) => !!row.archived === !!archive)
+                .map((row, i) => (
+                  <TableRow key={i}>
+                    <TableCell>{new Date(row.created_at).toLocaleString()}</TableCell>
+                    <TableCell>
+                      <ToggleLocked surveyId={row.id} locked={row.locked} />
+                    </TableCell>
+                    <TableCell>
+                      <Link to={`/results/${row.id}`}>{row.data.title}</Link>
+                    </TableCell>
+                    <TableCell>
+                      <Button size="small" onClick={() => updateArchived(row.id, !row.archived)}>
+                        {row.archived ? 'Vybrať z Archívu' : 'Archivovať'}
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </Paper>
+        <Link to="/create">
+          <Button variant="contained" color="primary" className={classes.button}>
+            <InsertDriveFile className={classes.leftIcon} />
+            Vytvoriť nový dotazník
+          </Button>
+        </Link>
+      </div>
+    </Fragment>
   )
 }
 
@@ -88,7 +102,10 @@ export default compose(
   withDataProviders((props) => {
     return [surveyListProvider(props.history.push)]
   }),
-  connect((state, props) => ({
-    data: state.surveyList,
-  }))
+  connect(
+    (state, props) => ({
+      data: state.surveyList,
+    }),
+    {updateArchived}
+  )
 )(SurveyList)

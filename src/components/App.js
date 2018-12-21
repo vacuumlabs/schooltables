@@ -14,6 +14,7 @@ const App = () => (
     <Route path="/create" component={Create} />
     <Route path="/preview" component={Preview} />
     <Route path="/surveys" component={SurveyList} />
+    <Route path="/archive" render={(props) => <SurveyList {...props} archive />} />
     <Route path="/survey/:id" component={Survey} />
     <Route path="/results/:id" component={Results} />
     <Redirect to="/" />

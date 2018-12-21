@@ -287,6 +287,31 @@ export const updateLocked = (id, locked) => async (dispatch, getState) => {
   }
 }
 
+export const updateArchived = (id, archived) => async (dispatch) => {
+  try {
+    const res = await fetch(`${process.env.REACT_APP_API_URL || ''}/admin/archive`, {
+      method: 'POST',
+      headers: new Headers({
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'X-Token': window.localStorage.getItem('token'),
+      }),
+      body: JSON.stringify({
+        id,
+        archived,
+      }),
+    })
+    if (res.ok) {
+      dispatch(updateValue(['surveyList', id, 'archived'], archived))
+    } else {
+      console.log(res.status)
+      console.log(res.statusText)
+    }
+  } catch (e) {
+    console.log(e)
+  }
+}
+
 // TODO warn that this clears in progress survey creation
 export const copySurvey = (id, pushHistory) => async (dispatch) => {
   try {
