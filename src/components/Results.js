@@ -73,9 +73,9 @@ const Results = ({id, results, classes, saveCsv, copyAndEdit}) => {
           {title}
         </Typography>
         <Typography gutterBottom className={classes.lockedTextContainer}>
-          <ToggleLocked locked={results.locked} surveyId={id} />{' '}
+          <ToggleLocked locked={results.locked} surveyId={id} />
           {results.locked
-            ? 'Pre uzamknutý formulár nie je viac možné pridávať odpovede. Odomknite kliknutím na zámok.'
+            ? ' Pre uzamknutý formulár nie je viac možné pridávať odpovede. Odomknite kliknutím na zámok.'
             : ''}
         </Typography>
         <Typography gutterBottom>Odkaz na dotazník: </Typography>

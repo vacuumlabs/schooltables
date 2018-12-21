@@ -321,8 +321,7 @@ export const copySurvey = (id, pushHistory) => async (dispatch) => {
       method: 'GET',
     })
     if (res.ok) {
-      const a = await res.json()
-      dispatch(updateValue(['create'], a))
+      dispatch(updateValue(['create'], await res.json()))
       pushHistory('/create')
     } else {
       console.log(res.status)
