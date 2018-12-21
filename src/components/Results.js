@@ -53,7 +53,6 @@ const styles = (theme) => ({
   lockedTextContainer: {
     display: 'flex',
     alignItems: 'flex-end',
-    color: 'red',
     fontWeight: 'bold',
   },
 })
@@ -74,8 +73,10 @@ const Results = ({id, results, classes, saveCsv, copyAndEdit}) => {
           {title}
         </Typography>
         <Typography gutterBottom className={classes.lockedTextContainer}>
-          <ToggleLocked locked={results.locked} surveyId={id} /> Pre uzamknutý formulár nie je viac
-          možné pridávať odpovede. Odomknite kliknutím na zámok.
+          <ToggleLocked locked={results.locked} surveyId={id} />{' '}
+          {results.locked
+            ? 'Pre uzamknutý formulár nie je viac možné pridávať odpovede. Odomknite kliknutím na zámok.'
+            : ''}
         </Typography>
         <Typography gutterBottom>Odkaz na dotazník: </Typography>
         <a href={`${window.location.origin}/survey/${id}`} className={classes.link}>

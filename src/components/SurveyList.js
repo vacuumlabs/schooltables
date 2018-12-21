@@ -58,8 +58,8 @@ const SurveyList = ({data, classes, archive, updateArchived}) => {
             <TableHead>
               <TableRow>
                 <TableCell>Dátum</TableCell>
-                <TableCell>Stav</TableCell>
                 <TableCell>Názov</TableCell>
+                <TableCell>Uzamknutý</TableCell>
                 <TableCell />
               </TableRow>
             </TableHead>
@@ -70,10 +70,10 @@ const SurveyList = ({data, classes, archive, updateArchived}) => {
                   <TableRow key={i}>
                     <TableCell>{new Date(row.created_at).toLocaleString()}</TableCell>
                     <TableCell>
-                      <ToggleLocked surveyId={row.id} locked={row.locked} />
+                      <Link to={`/results/${row.id}`}>{row.data.title}</Link>
                     </TableCell>
                     <TableCell>
-                      <Link to={`/results/${row.id}`}>{row.data.title}</Link>
+                      <ToggleLocked surveyId={row.id} locked={row.locked} />
                     </TableCell>
                     <TableCell>
                       <Button size="small" onClick={() => updateArchived(row.id, !row.archived)}>
