@@ -6,7 +6,7 @@ import {withRouter, Link} from 'react-router-dom'
 import {withDataProviders} from 'data-provider'
 import {get} from 'lodash'
 import {root} from '../styles'
-import {submitSurvey, clearStoredData, loadOrClearSurvey} from '../actions'
+import {copySurvey} from '../actions'
 import {paramsIdSelector, resultsSelector} from '../selectors'
 import {resultsProvider} from '../dataProviders'
 import {downloadCsv} from '../utils'
@@ -53,12 +53,11 @@ const styles = (theme) => ({
   lockedTextContainer: {
     display: 'flex',
     alignItems: 'flex-end',
-    color: 'red',
     fontWeight: 'bold',
   },
 })
 
-const Results = ({id, results, classes, saveCsv}) => {
+const Results = ({id, results, classes, saveCsv, copyAndEdit}) => {
   const {tables, title, note} = results
   const path = `results[${id}]`
   return (
@@ -74,8 +73,10 @@ const Results = ({id, results, classes, saveCsv}) => {
           {title}
         </Typography>
         <Typography gutterBottom className={classes.lockedTextContainer}>
-          <ToggleLocked locked={results.locked} surveyId={id} /> Pre uzamknutý formulár nie je viac
-          možné pridávať odpovede. Odomknite kliknutím na zámok.
+          <ToggleLocked locked={results.locked} surveyId={id} />
+          {results.locked
+            ? ' Pre uzamknutý formulár nie je viac možné pridávať odpovede. Odomknite kliknutím na zámok.'
+            : ''}
         </Typography>
         <Typography gutterBottom>Odkaz na dotazník: </Typography>
         <a href={`${window.location.origin}/survey/${id}`} className={classes.link}>
@@ -97,6 +98,15 @@ const Results = ({id, results, classes, saveCsv}) => {
               return null
           }
         })}
+        <Button
+          variant="contained"
+          color="primary"
+          className={classes.button}
+          onClick={copyAndEdit}
+        >
+          <DownloadIcon className={classes.leftIcon} />
+          Kopírovať a Upraviť
+        </Button>
         <Button variant="contained" color="primary" className={classes.button} onClick={saveCsv}>
           <DownloadIcon className={classes.leftIcon} />
           Stiahnuť .csv
@@ -113,10 +123,14 @@ export default compose(
   withDataProviders((props) => {
     return [resultsProvider(props.id, props.history.push)]
   }),
-  connect((state, props) => ({
-    results: resultsSelector(state, props),
-  })),
-  withProps(({results}) => ({
+  connect(
+    (state, props) => ({
+      results: resultsSelector(state, props),
+    }),
+    {copySurvey}
+  ),
+  withProps(({results, id, history, copySurvey}) => ({
     saveCsv: () => downloadCsv(results.tables, `${results.title}.csv`),
+    copyAndEdit: () => copySurvey(id, history.push),
   }))
 )(Results)
