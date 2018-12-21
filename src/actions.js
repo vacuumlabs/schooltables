@@ -286,3 +286,24 @@ export const updateLocked = (id, locked) => async (dispatch, getState) => {
     console.log(e)
   }
 }
+
+// TODO warn that this clears in progress survey creation
+export const copySurvey = (id, pushHistory) => async (dispatch) => {
+  try {
+    dispatch(clearSurveyData('create'))
+    window.localStorage.removeItem('create')
+    const res = await fetch(`${process.env.REACT_APP_API_URL || ''}/api/survey/${id}`, {
+      method: 'GET',
+    })
+    if (res.ok) {
+      const a = await res.json()
+      dispatch(updateValue(['create'], a))
+      pushHistory('/create')
+    } else {
+      console.log(res.status)
+      console.log(res.statusText)
+    }
+  } catch (e) {
+    console.log(e)
+  }
+}
