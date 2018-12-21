@@ -8,11 +8,11 @@ import LockOpen from '@material-ui/icons/LockOpen'
 
 const ToggleLocked = ({surveyId, locked, toggleLocked}) =>
   locked ? (
-    <div className="clickable" title="Zamknutý" onClick={toggleLocked}>
+    <div className="clickable" style={{display: 'flex'}} title="Zamknutý" onClick={toggleLocked}>
       <Lock />
     </div>
   ) : (
-    <div className="clickable" title="Otvorený" onClick={toggleLocked}>
+    <div className="clickable" style={{display: 'flex'}} title="Otvorený" onClick={toggleLocked}>
       <LockOpen />
     </div>
   )

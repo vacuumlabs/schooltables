@@ -5,7 +5,7 @@ import {connect} from 'react-redux'
 import {branch, withHandlers, withProps} from 'recompose'
 import {withRouter, Link, Route} from 'react-router-dom'
 import {withDataProviders} from 'data-provider'
-import {get} from 'lodash'
+import {omit} from 'lodash'
 import {submitSurvey, clearStoredData, loadOrClearSurvey} from '../actions'
 import {paramsOrCreateSelector} from '../selectors'
 import {surveyProvider} from '../dataProviders'
@@ -52,6 +52,12 @@ const styles = (theme) => ({
   printRoot: {
     margin: '20mm',
   },
+  lockedTextContainer: {
+    display: 'flex',
+    alignItems: 'flex-end',
+    color: 'red',
+    fontWeight: 'bold',
+  },
 })
 
 class Survey extends React.Component {
@@ -70,7 +76,7 @@ class Survey extends React.Component {
   componentDidUpdate = () => {
     const id = paramsOrCreateSelector(undefined, this.props)
     if (!this.props.print && id !== 'create' && this.state.loaded) {
-      window.localStorage.setItem(id, JSON.stringify(this.props.data))
+      window.localStorage.setItem(id, JSON.stringify(omit(this.props.data, ['locked'])))
     }
     return null
   }
@@ -143,8 +149,13 @@ class Survey extends React.Component {
             {title}
           </Typography>
           {locked && (
-            <Typography title="Formulár je zamknutý" gutterBottom>
-              <Lock style={{color: 'red'}} />
+            <Typography
+              title="Formulár je zamknutý"
+              gutterBottom
+              className={classes.lockedTextContainer}
+            >
+              <Lock style={{color: 'red'}} /> Formulár je uzamknutý a nové odpovede už nie je možné
+              odoslať. Kontaktujte prosím správcu.
             </Typography>
           )}
           <Typography gutterBottom>{note}</Typography>

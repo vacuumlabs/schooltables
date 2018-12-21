@@ -76,7 +76,7 @@ export const loadOrClearSurvey = (path) => ({
     const saved = window.localStorage.getItem(path)
     const surveyToUse = saved ? JSON.parse(saved) : survey
     // always clear 'create' survey
-    if (path !== 'create' && saved) return JSON.parse(saved)
+    if (path !== 'create' && saved) return {...survey, ...JSON.parse(saved)}
     const tables = surveyToUse.tables.map((table) => {
       switch (table.type) {
         case 'header':
