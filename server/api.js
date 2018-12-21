@@ -14,10 +14,18 @@ router.get('/survey/:id', async (req, res, next) => {
     .select('*')
     .where('id', req.params.id)
     .first()
-  res.json({id: dbData.id, created_at: dbData.created_at, ...dbData.data})
+  res.json({id: dbData.id, created_at: dbData.created_at, locked: dbData.locked, ...dbData.data})
 })
 
 router.post('/submit/:id', async (req, res, next) => {
+  const {locked} = await db('surveys')
+    .select('locked')
+    .where('id', req.params.id)
+    .first()
+  if (locked) {
+    res.sendStatus(403)
+    return
+  }
   const test = await db('results')
     .insert({
       created_at: new Date().toISOString(),

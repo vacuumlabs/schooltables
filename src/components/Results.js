@@ -23,6 +23,7 @@ import Title from './Title'
 import Header from './Header'
 import Standard from './Standard'
 import Rectangular from './Rectangular'
+import ToggleLocked from './ToggleLocked'
 
 const styles = (theme) => ({
   root,
@@ -49,6 +50,12 @@ const styles = (theme) => ({
   leftIcon: {
     marginRight: theme.spacing.unit,
   },
+  lockedTextContainer: {
+    display: 'flex',
+    alignItems: 'flex-end',
+    color: 'red',
+    fontWeight: 'bold',
+  },
 })
 
 const Results = ({id, results, classes, saveCsv}) => {
@@ -65,6 +72,10 @@ const Results = ({id, results, classes, saveCsv}) => {
       <Paper className={classes.paper}>
         <Typography variant="display2" gutterBottom>
           {title}
+        </Typography>
+        <Typography gutterBottom className={classes.lockedTextContainer}>
+          <ToggleLocked locked={results.locked} surveyId={id} /> Pre uzamknutý formulár nie je viac
+          možné pridávať odpovede. Odomknite kliknutím na zámok.
         </Typography>
         <Typography gutterBottom>Odkaz na dotazník: </Typography>
         <a href={`${window.location.origin}/survey/${id}`} className={classes.link}>

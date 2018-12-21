@@ -15,6 +15,7 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
 import InsertDriveFile from '@material-ui/icons/InsertDriveFile'
+import ToggleLocked from './ToggleLocked'
 
 const styles = (theme) => ({
   container: {
@@ -52,6 +53,7 @@ const SurveyList = ({data, classes}) => {
           <TableHead>
             <TableRow>
               <TableCell>Dátum</TableCell>
+              <TableCell>Stav</TableCell>
               <TableCell>Názov</TableCell>
             </TableRow>
           </TableHead>
@@ -59,6 +61,9 @@ const SurveyList = ({data, classes}) => {
             {Object.values(data).map((row, i) => (
               <TableRow key={i}>
                 <TableCell>{new Date(row.created_at).toLocaleString()}</TableCell>
+                <TableCell>
+                  <ToggleLocked surveyId={row.id} locked={row.locked} />
+                </TableCell>
                 <TableCell>
                   <Link to={`/results/${row.id}`}>{row.data.title}</Link>
                 </TableCell>

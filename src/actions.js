@@ -76,7 +76,7 @@ export const loadOrClearSurvey = (path) => ({
     const saved = window.localStorage.getItem(path)
     const surveyToUse = saved ? JSON.parse(saved) : survey
     // always clear 'create' survey
-    if (path !== 'create' && saved) return JSON.parse(saved)
+    if (path !== 'create' && saved) return {...survey, ...JSON.parse(saved)}
     const tables = surveyToUse.tables.map((table) => {
       switch (table.type) {
         case 'header':
@@ -257,6 +257,32 @@ export const submitSurvey = (id, pushHistory) => async (dispatch, getState) => {
     }
   } catch (e) {
     console.log('or catch')
+    console.log(e)
+  }
+}
+
+export const updateLocked = (id, locked) => async (dispatch, getState) => {
+  try {
+    const res = await fetch(`${process.env.REACT_APP_API_URL || ''}/admin/lock`, {
+      method: 'POST',
+      headers: new Headers({
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'X-Token': window.localStorage.getItem('token'),
+      }),
+      body: JSON.stringify({
+        id,
+        locked,
+      }),
+    })
+    if (res.ok) {
+      getState().surveyList[id] && dispatch(updateValue(['surveyList', id, 'locked'], locked))
+      getState().results[id] && dispatch(updateValue(['results', id, 'locked'], locked))
+    } else {
+      console.log(res.status)
+      console.log(res.statusText)
+    }
+  } catch (e) {
     console.log(e)
   }
 }

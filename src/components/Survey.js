@@ -5,7 +5,7 @@ import {connect} from 'react-redux'
 import {branch, withHandlers, withProps} from 'recompose'
 import {withRouter, Link, Route} from 'react-router-dom'
 import {withDataProviders} from 'data-provider'
-import {get} from 'lodash'
+import {omit} from 'lodash'
 import {submitSurvey, clearStoredData, loadOrClearSurvey} from '../actions'
 import {paramsOrCreateSelector} from '../selectors'
 import {surveyProvider} from '../dataProviders'
@@ -21,6 +21,7 @@ import Cancel from '@material-ui/icons/Cancel'
 import Typography from '@material-ui/core/Typography'
 import DownloadIcon from '@material-ui/icons/CloudDownload'
 import ArrowBack from '@material-ui/icons/ArrowBack'
+import Lock from '@material-ui/icons/Lock'
 import Header from './Header'
 import Standard from './Standard'
 import Rectangular from './Rectangular'
@@ -51,6 +52,12 @@ const styles = (theme) => ({
   printRoot: {
     margin: '20mm',
   },
+  lockedTextContainer: {
+    display: 'flex',
+    alignItems: 'flex-end',
+    color: 'red',
+    fontWeight: 'bold',
+  },
 })
 
 class Survey extends React.Component {
@@ -69,7 +76,7 @@ class Survey extends React.Component {
   componentDidUpdate = () => {
     const id = paramsOrCreateSelector(undefined, this.props)
     if (!this.props.print && id !== 'create' && this.state.loaded) {
-      window.localStorage.setItem(id, JSON.stringify(this.props.data))
+      window.localStorage.setItem(id, JSON.stringify(omit(this.props.data, ['locked'])))
     }
     return null
   }
@@ -77,13 +84,13 @@ class Survey extends React.Component {
   render = () => {
     if (!this.state.loaded) return null
     const {path, data, classes, submit, deleteSurvey, preview, saveCsv, print} = this.props
-    const {tables, title, done, note} = data
+    const {tables, title, done, note, locked} = data
     if (done && !print) {
       return (
         <div className={classes.root}>
           <Paper className={classes.paper}>
             <Typography variant="subheading" gutterBottom>
-              Ďakujeme za vyplnenie formulara
+              Ďakujeme za vyplnenie formulára
             </Typography>
             <ReactToPrint
               trigger={() => (
@@ -141,6 +148,16 @@ class Survey extends React.Component {
           <Typography variant="display2" gutterBottom>
             {title}
           </Typography>
+          {locked && (
+            <Typography
+              title="Formulár je zamknutý"
+              gutterBottom
+              className={classes.lockedTextContainer}
+            >
+              <Lock style={{color: 'red'}} /> Formulár je uzamknutý a nové odpovede už nie je možné
+              odoslať. Kontaktujte prosím správcu.
+            </Typography>
+          )}
           <Typography gutterBottom>{note}</Typography>
           {tables.map((t, i) => {
             const tablePath = `${path}.tables[${i}]`
@@ -175,8 +192,13 @@ class Survey extends React.Component {
                 color="primary"
                 className={classes.button}
                 onClick={submit}
+                title={locked && 'Formulár je zamknutý'}
               >
-                <Send className={classes.leftIcon} />
+                {locked ? (
+                  <Lock className={classes.leftIcon} />
+                ) : (
+                  <Send className={classes.leftIcon} />
+                )}
                   Dokončiť formulár
               </Button>
             </div>
