@@ -1,4 +1,4 @@
-import {set} from 'lodash'
+import {set, pick} from 'lodash'
 import produce from 'immer'
 import {unparse} from 'papaparse'
 
@@ -81,3 +81,6 @@ export function download(data, filename, type) {
 export const downloadCsv = (tables, title) => {
   download(unparseTables(tables).join(',\r\n,\r\n'), title, 'csv')
 }
+
+// make sure no additional fields make it into the JSON
+export const validateCreateTable = (table) => pick(table, ['title', 'note', 'tables'])

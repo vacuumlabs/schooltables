@@ -1,4 +1,8 @@
-import {mappingFn as defaultMappingFn, createEmptyRectangularData} from './utils'
+import {
+  mappingFn as defaultMappingFn,
+  createEmptyRectangularData,
+  validateCreateTable,
+} from './utils'
 import getInitialState, {emptyRectangular, emptyStandard} from './state'
 import {get, omit} from 'lodash'
 
@@ -224,7 +228,7 @@ export const submitCreate = (pushHistory) => async (dispatch, getState) => {
         'Content-Type': 'application/json',
         'X-Token': window.localStorage.getItem('token'),
       }),
-      body: JSON.stringify(getState().create),
+      body: JSON.stringify(validateCreateTable(getState().create)),
     })
     if (res.ok) {
       const body = await res.json()
@@ -321,7 +325,7 @@ export const copySurvey = (id, pushHistory) => async (dispatch) => {
       method: 'GET',
     })
     if (res.ok) {
-      dispatch(updateValue(['create'], await res.json()))
+      dispatch(updateValue(['create'], validateCreateTable(await res.json())))
       pushHistory('/create')
     } else {
       console.log(res.status)
