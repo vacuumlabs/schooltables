@@ -48,7 +48,7 @@ router.post('/create', async (req, res) => {
   const test = await db('surveys')
     .insert({
       created_at: new Date().toISOString(),
-      data: JSON.stringify(req.body),
+      data: JSON.stringify(_.pick(req.body, ['title', 'note', 'tables'])),
     })
     .returning('id')
   res.json({id: test[0]})
